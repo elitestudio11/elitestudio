@@ -1,11 +1,13 @@
-// Discord OAuth2 Configuration - Implicit Grant Flow
+
+
 const DISCORD_CONFIG = {
     clientId: '1454839147163287645',
-    redirectUri: 'https://elitestudio11.github.io/index.html', // ⚠️ استبدل YOUR-USERNAME باسم المستخدم الخاص بك
+redirectUri: 'https://elitestudio11.github.io/elite-studio/index.html',
     scope: 'identify email',
     authEndpoint: 'https://discord.com/api/oauth2/authorize',
     userEndpoint: 'https://discord.com/api/users/@me'
 };
+
 
 // Multilingual Support
 const translations = {
@@ -1033,3 +1035,4 @@ window.selectPlan = selectPlan;
 window.closeSuccessModal = closeSuccessModal;
 
 console.log('✅ Elite Studio Script Loaded Successfully');
+
