@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Studio | استوديو التصاميم الاحترافي</title>
+    <meta name="description" content="Elite Studio - استوديو تصاميم احترافي متخصص في تصاميم Discord، لوغوهات، بانرات وأكثر">
+    <meta name="keywords" content="تصاميم, ديسكورد, لوغو, بانرات, تصميم احترافي">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+</head>
+<body>
+    <!-- Floating Elements -->
+    <div class="floating-element el-1"></div>
+    <div class="floating-element el-2"></div>
+    <div class="floating-element el-3"></div>
+    <div class="floating-element el-4"></div>
+<body data-theme="light"></body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-text">Elite Studio</div>
+        </div>
+    </div>
+
+   
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="brand">
+                    <div class="logo">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <span class="brand-name">Elite <span class="brand-highlight">Studio</span></span>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span class="menu-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="nav-links" id="navLinks">
+                    <a href="#home" class="nav-link active" data-ar="الرئيسية" data-en="Home">
+                        <i class="fas fa-home"></i>
+                        <span class="nav-text">الرئيسية</span>
+                    </a>
+                    <a href="#features" class="nav-link" data-ar="المميزات" data-en="Features">
+                        <i class="fas fa-star"></i>
+                        <span class="nav-text">المميزات</span>
+                    </a>
+                    <a href="#portfolio" class="nav-link" data-ar="أعمالنا" data-en="Portfolio">
+                        <i class="fas fa-briefcase"></i>
+                        <span class="nav-text">أعمالنا</span>
+                    </a>
+                    <a href="#pricing" class="nav-link" data-ar="الأسعار" data-en="Pricing">
+                        <i class="fas fa-tags"></i>
+                        <span class="nav-text">الأسعار</span>
+                    </a>
+                    <a href="#contact" class="nav-link" data-ar="تواصل معنا" data-en="Contact">
+                        <i class="fas fa-envelope"></i>
+                        <span class="nav-text">تواصل معنا</span>
+                    </a>
+                    
+                    <div class="nav-actions">
+                        <!-- Discord Auth Button -->
+                        <div class="discord-auth" id="discordAuth">
+                            <!-- Not Connected State -->
+                            <button class="discord-btn" id="discordConnectBtn" onclick="connectDiscord()">
+                                <i class="fab fa-discord"></i>
+                                <span data-ar="ربط Discord" data-en="Connect Discord">ربط Discord</span>
+                            </button>
+                            
+                            <!-- Connected State -->
+                            <div class="discord-profile" id="discordProfile" style="display: none;">
+                                <div class="profile-avatar" id="profileAvatar">
+                                    <img id="userAvatar" src="" alt="Avatar">
+                                </div>
+                                <div class="profile-info">
+                                    <span class="profile-name" id="userName">Loading...</span>
+                                    <span class="profile-id" id="userId">#0000</span>
+                                </div>
+                                <div class="profile-dropdown">
+                                    <button class="profile-menu-btn" onclick="toggleProfileMenu()">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="profile-menu" id="profileMenu">
+                                        <a href="#" onclick="showProfileModal()">
+                                            <i class="fas fa-user"></i>
+                                            <span data-ar="الملف الشخصي" data-en="Profile">الملف الشخصي</span>
+                                        </a>
+                                        <a href="#" onclick="disconnectDiscord()">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            <span data-ar="تسجيل الخروج" data-en="Logout">تسجيل الخروج</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+<div class="theme-toggle">
+    <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-sun" id="themeIcon"></i>
+    </button>
+</div>
+                        <div class="language-switcher">
+                            <button class="language-btn" id="languageBtn">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLang">AR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Discord Profile Modal -->
+    <div class="modal" id="discordProfileModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-header">
+                <i class="fab fa-discord modal-icon"></i>
+                <h2 data-ar="ملف Discord الشخصي" data-en="Discord Profile">ملف Discord الشخصي</h2>
+            </div>
+
+            <div class="discord-profile-content" id="discordProfileContent">
+                <div class="profile-card">
+                    <div class="profile-banner" id="profileBanner">
+                        <div class="profile-avatar-large">
+                            <img id="modalUserAvatar" src="" alt="Avatar">
+                            <div class="status-indicator" id="userStatus"></div>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h3 id="modalUserName">Loading...</h3>
+                        <p class="username" id="modalUsername">@username</p>
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="label" data-ar="معرف المستخدم:" data-en="User ID:">معرف المستخدم:</span>
+                                <span class="value" id="modalUserId">000000000000000000</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label" data-ar="تاريخ الانضمام:" data-en="Joined Discord:">تاريخ الانضمام:</span>
+                                <span class="value" id="userJoinDate">Unknown</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label" data-ar="تاريخ الربط:" data-en="Connected:">تاريخ الربط:</span>
+                                <span class="value" id="connectionDate">Just now</span>
+                            </div>
+                        </div>
+                        <div class="user-badges" id="userBadges">
+                            <!-- Badges will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <!-- Badges -->
+                <div class="badges">
+                    <span class="badge badge-gradient">
+                        <i class="fas fa-paint-brush"></i>
+                        <span data-ar="تصاميم احترافية" data-en="Professional Designs">تصاميم احترافية</span>
+                    </span>
+                    <span class="badge badge-outline">
+                        <i class="fas fa-bolt"></i>
+                        <span data-ar="تسليم سريع" data-en="Fast Delivery">تسليم سريع</span>
+                    </span>
+                </div>
+
+                <!-- Discord Notice -->
+                <div class="discord-notice animated-pulse">
+                    <i class="fab fa-discord"></i>
+                    <span data-ar="انضم لـ <strong>00+</strong> عميل راضي!" data-en="Join <strong>2,800+</strong> satisfied clients!">
+                        انضم لـ <strong>0+</strong> عميل راضي!
+                    </span>
+                    <a href="https://discord.gg/xxHDrrgWEy" target="_blank" class="discord-link">
+                        <span data-ar="انقر للانضمام" data-en="Click to Join">انقر للانضمام</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="hero-title">
+                    <span class="title-line" data-ar="استوديو التصاميم" data-en="Design Studio">استوديو التصاميم</span>
+                    <span class="title-line"><span class="text-gradient" data-ar="الاحترافي" data-en="Professional">الاحترافي</span> <span data-ar="لمشاريعك" data-en="For Your Projects">لمشاريعك</span></span>
+                </h1>
+
+                <!-- Description -->
+                <p class="hero-description" data-ar="نقدم تصاميم احترافية عالية الجودة لسيرفرات Discord، لوغوهات، بانرات، وكل ما تحتاجه لمشروعك. فريقنا المحترف جاهز لتحويل أفكارك إلى واقع مبهر." data-en="We provide high-quality professional designs for Discord servers, logos, banners, and everything you need for your project. Our professional team is ready to turn your ideas into stunning reality.">
+                    نقدم تصاميم احترافية عالية الجودة لسيرفرات Discord، لوغوهات، بانرات، وكل ما تحتاجه لمشروعك.
+                    فريقنا المحترف جاهز لتحويل أفكارك إلى واقع مبهر.
+                </p>
+
+                <!-- Stats -->
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-count="0">0</div>
+                            <div class="stat-label" data-ar="عميل راضي" data-en="Happy Clients">عميل راضي</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-count="5400">0</div>
+                            <div class="stat-label" data-ar="تصميم منجز" data-en="Completed Designs">تصميم منجز</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-count="99">0</div>
+                            <div class="stat-label" data-ar="% تقييم العملاء" data-en="% Client Rating">% تقييم العملاء</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-count="24">0</div>
+                            <div class="stat-label" data-ar="ساعة دعم" data-en="Hour Support">ساعة دعم</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="hero-cta">
+                    <a href="#pricing" class="btn btn-primary btn-large">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span data-ar="تصفح الباقات" data-en="Browse Packages">تصفح الباقات</span>
+                    </a>
+                    <a href="#portfolio" class="btn btn-outline btn-large">
+                        <i class="fas fa-images"></i>
+                        <span data-ar="شاهد أعمالنا" data-en="View Our Work">شاهد أعمالنا</span>
+                    </a>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="trust-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span data-ar="دفع آمن 100%" data-en="100% Secure Payment">دفع آمن 100%</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-undo"></i>
+                        <span data-ar="ضمان استرجاع المال" data-en="Money Back Guarantee">ضمان استرجاع المال</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-headset"></i>
+                        <span data-ar="دعم فني 24/7" data-en="24/7 Support">دعم فني 24/7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle" data-ar="لماذا نحن؟" data-en="Why Us?">لماذا نحن؟</span>
+                <h2 class="section-title" data-ar="مميزات استوديو Elite" data-en="Elite Studio Features">مميزات استوديو Elite</h2>
+                <p class="section-description" data-ar="نقدم لك أفضل الخدمات والميزات لضمان حصولك على تصميم مثالي" data-en="We provide you with the best services and features to ensure you get the perfect design">
+                    نقدم لك أفضل الخدمات والميزات لضمان حصولك على تصميم مثالي
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="feature-title" data-ar="تصاميم احترافية" data-en="Professional Designs">تصاميم احترافية</h3>
+                    <p class="feature-description" data-ar="فريق من المصممين المحترفين يعملون على إنتاج تصاميم عالية الجودة تناسب احتياجاتك" data-en="A team of professional designers working to produce high-quality designs that suit your needs">
+                        فريق من المصممين المحترفين يعملون على إنتاج تصاميم عالية الجودة تناسب احتياجاتك
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="feature-title" data-ar="تسليم سريع" data-en="Fast Delivery">تسليم سريع</h3>
+                    <p class="feature-description" data-ar="نضمن تسليم تصميمك في الوقت المحدد مع الحفاظ على أعلى معايير الجودة" data-en="We guarantee delivery of your design on time while maintaining the highest quality standards">
+                        نضمن تسليم تصميمك في الوقت المحدد مع الحفاظ على أعلى معايير الجودة
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-redo"></i>
+                    </div>
+                    <h3 class="feature-title" data-ar="تعديلات مجانية" data-en="Free Revisions">تعديلات مجانية</h3>
+                    <p class="feature-description" data-ar="نقدم تعديلات مجانية حتى تحصل على التصميم المثالي الذي يناسب رؤيتك" data-en="We offer free revisions until you get the perfect design that matches your vision">
+                        نقدم تعديلات مجانية حتى تحصل على التصميم المثالي الذي يناسب رؤيتك
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title" data-ar="دفع آمن" data-en="Secure Payment">دفع آمن</h3>
+                    <p class="feature-description" data-ar="نستخدم أحدث تقنيات التشفير لحماية معلوماتك المالية بشكل كامل" data-en="We use the latest encryption technologies to fully protect your financial information">
+                        نستخدم أحدث تقنيات التشفير لحماية معلوماتك المالية بشكل كامل
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title" data-ar="دعم فني 24/7" data-en="24/7 Support">دعم فني 24/7</h3>
+                    <p class="feature-description" data-ar="فريق الدعم الفني جاهز لمساعدتك في أي وقت وحل جميع استفساراتك" data-en="Technical support team ready to help you anytime and answer all your questions">
+                        فريق الدعم الفني جاهز لمساعدتك في أي وقت وحل جميع استفساراتك
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="feature-title" data-ar="جودة مضمونة" data-en="Guaranteed Quality">جودة مضمونة</h3>
+                    <p class="feature-description" data-ar="نضمن لك الحصول على تصميم احترافي أو نعيد لك أموالك بالكامل" data-en="We guarantee you get a professional design or we'll refund your money completely">
+                        نضمن لك الحصول على تصميم احترافي أو نعيد لك أموالك بالكامل
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio-section" id="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle" data-ar="أعمالنا" data-en="Our Work">أعمالنا</span>
+                <h2 class="section-title" data-ar="معرض التصاميم" data-en="Design Gallery">معرض التصاميم</h2>
+                <p class="section-description" data-ar="اطلع على بعض من أفضل أعمالنا المنجزة لعملائنا" data-en="Check out some of our best work completed for our clients">
+                    اطلع على بعض من أفضل أعمالنا المنجزة لعملائنا
+                </p>
+            </div>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://cdn.discordapp.com/attachments/1454895295816274126/1454906736015314986/1111.webp?ex=6952cafc&is=6951797c&hm=d8212d0c85cf36a678b8ab4366d804a8627dcb0c380447b191792593af4b90b4&" alt="Discord Design">
+                        <div class="portfolio-overlay">
+                            <h4 data-ar="تصميم سيرفر Discord" data-en="Discord Server Design">تصميم سيرفر Discord</h4>
+                            <p data-ar="تصميم كامل لسيرفر احترافي" data-en="Complete professional server design">تصميم كامل لسيرفر احترافي</p>
+                        </div>
+                    </div>
+                </div>
+        <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi_hqNIE1dJC85m6Zb9zVU45AN0JrTWQw9Iw&s" alt="Discord Design">
+                        <div class="portfolio-overlay">
+                            <h4 data-ar="تصميم سيرفر Discord" data-en="Discord Server Design">تصميم سيرفر Discord</h4>
+                            <p data-ar="تصميم كامل لسيرفر احترافي" data-en="Complete professional server design">تصميم كامل لسيرفر احترافي</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle" data-ar="الباقات" data-en="Packages">الباقات</span>
+                <h2 class="section-title" data-ar="اختر الباقة المناسبة لك" data-en="Choose Your Package">اختر الباقة المناسبة لك</h2>
+                <p class="section-description" data-ar="أسعار تنافسية وباقات متنوعة تناسب جميع الاحتياجات" data-en="Competitive prices and diverse packages for all needs">
+                    أسعار تنافسية وباقات متنوعة تناسب جميع الاحتياجات
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Basic Package -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3 class="pricing-title" data-ar="الباقة الأساسية" data-en="Basic Package">الباقة الأساسية</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">5</span>
+                        </div>
+                        <p class="pricing-period" data-ar="لكل تصميم" data-en="Per Design">لكل تصميم</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <span data-ar="تصميم واحد احترافي" data-en="One professional design">تصميم واحد احترافي</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="تعديلان مجانيان" data-en="2 free revisions">تعديلان مجانيان</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="ملفات بجودة عالية" data-en="High quality files">ملفات بجودة عالية</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="تسليم خلال 3 أيام" data-en="3 days delivery">تسليم خلال 3 أيام</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="دعم فني" data-en="Technical support">دعم فني</span></li>
+                    </ul>
+                    <button class="btn btn-primary btn-full" onclick="selectPlan('basic')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span data-ar="اشترِ الآن" data-en="Buy Now">اشترِ الآن</span>
+                    </button>
+                </div>
+
+                <!-- Pro Package -->
+                <div class="pricing-card pricing-featured">
+                    <div class="pricing-badge" data-ar="الأكثر شعبية" data-en="Most Popular">الأكثر شعبية</div>
+                    <div class="pricing-header">
+                        <div class="pricing-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 class="pricing-title" data-ar="الباقة المتقدمة" data-en="Pro Package">الباقة المتقدمة</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">20</span>
+                        </div>
+                        <p class="pricing-period" data-ar="لكل تصميم" data-en="Per Design">لكل تصميم</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <span data-ar="3 تصاميم احترافية" data-en="3 professional designs">3 تصاميم احترافية</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="تعديلات غير محدودة" data-en="Unlimited revisions">تعديلات غير محدودة</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="ملفات مصدر كاملة" data-en="Full source files">ملفات مصدر كاملة</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="تسليم خلال يومين" data-en="2 days delivery">تسليم خلال يومين</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="دعم فني أولوية" data-en="Priority support">دعم فني أولوية</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="استشارة مجانية" data-en="Free consultation">استشارة مجانية</span></li>
+                    </ul>
+                    <button class="btn btn-primary btn-full" onclick="selectPlan('pro')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span data-ar="اشترِ الآن" data-en="Buy Now">اشترِ الآن</span>
+                    </button>
+                </div>
+
+                <!-- Enterprise Package -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3 class="pricing-title" data-ar="باقة الأعمال" data-en="Enterprise Package">باقة الأعمال</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">30</span>
+                        </div>
+                        <p class="pricing-period" data-ar="لكل مشروع" data-en="Per Project">لكل مشروع</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <span data-ar="مشروع كامل متكامل" data-en="Complete full project">مشروع كامل متكامل</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="تعديلات غير محدودة" data-en="Unlimited revisions">تعديلات غير محدودة</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="جميع ملفات المصدر" data-en="All source files">جميع ملفات المصدر</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="تسليم فوري (24 ساعة)" data-en="Express delivery (24h)">تسليم فوري (24 ساعة)</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="دعم فني مخصص" data-en="Dedicated support">دعم فني مخصص</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="مدير مشروع شخصي" data-en="Personal project manager">مدير مشروع شخصي</span></li>
+                        <li><i class="fas fa-check"></i> <span data-ar="ضمان رضا 100%" data-en="100% satisfaction guarantee">ضمان رضا 100%</span></li>
+                    </ul>
+                    <button class="btn btn-primary btn-full" onclick="selectPlan('enterprise')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span data-ar="اشترِ الآن" data-en="Buy Now">اشترِ الآن</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</span>
+                <h2 class="section-title" data-ar="هل لديك استفسار؟" data-en="Have a Question?">هل لديك استفسار؟</h2>
+                <p class="section-description" data-ar="نحن هنا لمساعدتك في أي وقت" data-en="We're here to help you anytime">
+                    نحن هنا لمساعدتك في أي وقت
+                </p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-discord"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 data-ar="Discord" data-en="Discord">Discord</h4>
+                            <a href="https://discord.gg/xxHDrrgWEy" target="_blank">discord.gg/xxHDrrgWEy</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</h4>
+                            <a href="mailto:support@elitestudio.com">support@elitestudio.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4 data-ar="ساعات العمل" data-en="Working Hours">ساعات العمل</h4>
+                            <p data-ar="متاحون 24/7 لخدمتك" data-en="Available 24/7 to serve you">متاحون 24/7 لخدمتك</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <h3 data-ar="تابعنا على" data-en="Follow Us">تابعنا على</h3>
+                    <div class="social-icons">
+                        
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="brand">
+                        <div class="logo">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <span class="brand-name">Elite <span class="brand-highlight">Studio</span></span>
+                    </div>
+                    <p data-ar="استوديو تصاميم احترافي متخصص في إبداع تصاميم فريدة ومميزة" data-en="Professional design studio specialized in creating unique and distinctive designs">
+                        استوديو تصاميم احترافي متخصص في إبداع تصاميم فريدة ومميزة
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h4 data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</h4>
+                    <ul>
+                        <li><a href="#home" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+                        <li><a href="#features" data-ar="المميزات" data-en="Features">المميزات</a></li>
+                        <li><a href="#portfolio" data-ar="أعمالنا" data-en="Portfolio">أعمالنا</a></li>
+                        <li><a href="#pricing" data-ar="الأسعار" data-en="Pricing">الأسعار</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4 data-ar="الدعم" data-en="Support">الدعم</h4>
+                    <ul>
+                        <li><a href="#" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a></li>
+                        <li><a href="#" data-ar="شروط الاستخدام" data-en="Terms of Service">شروط الاستخدام</a></li>
+                        <li><a href="#" data-ar="سياسة الاسترجاع" data-en="Refund Policy">سياسة الاسترجاع</a></li>
+                        <li><a href="#contact" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Elite Studio. <span data-ar="جميع الحقوق محفوظة ومبرمج محمد" data-en="All rights reserved">جميع الحقوق محفوظة</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closePaymentModal">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-header">
+                <i class="fas fa-shopping-cart modal-icon"></i>
+                <h2 id="paymentTitle" data-ar="إتمام عملية الشراء" data-en="Complete Purchase">إتمام عملية الشراء</h2>
+            </div>
+
+            <!-- Loading State -->
+            <div class="payment-loading" id="paymentLoading">
+                <div class="loader-circle"></div>
+                <p data-ar="جاري تحضير نظام الدفع..." data-en="Preparing payment system...">جاري تحضير نظام الدفع...</p>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="payment-details" id="paymentDetails" style="display: none;">
+                <div class="order-summary">
+                    <h3 data-ar="ملخص الطلب" data-en="Order Summary">ملخص الطلب</h3>
+                    <div class="summary-item">
+                        <span data-ar="الباقة المختارة:" data-en="Selected Package:">الباقة المختارة:</span>
+                        <strong id="selectedPlanName"></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span data-ar="السعر:" data-en="Price:">السعر:</span>
+                        <strong id="selectedPlanPrice"></strong>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h3 data-ar="اختر طريقة الدفع" data-en="Choose Payment Method">اختر طريقة الدفع</h3>
+                    
+                    <!-- PayPal Button -->
+                    <div class="payment-method">
+                        <div id="paypal-button-container"></div>
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="security-notice">
+                        <i class="fas fa-lock"></i>
+                        <p data-ar="جميع المعاملات محمية بتشفير SSL 256-bit" data-en="All transactions are protected with 256-bit SSL encryption">
+                            جميع المعاملات محمية بتشفير SSL 256-bit
+                        </p>
+                    </div>
+                </div>
+
+                <!-- After Payment Notice -->
+                <div class="after-payment-notice">
+                    <div class="notice-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div class="notice-content">
+                        <h4 data-ar="بعد إتمام الدفع" data-en="After Payment">بعد إتمام الدفع</h4>
+                        <p data-ar="سيتم إنشاء تذكرة Discord تلقائياً لك. يرجى التوجه إلى سيرفرنا وفتح التذكرة لاستلام تصميمك." data-en="A Discord ticket will be automatically created for you. Please go to our server and open the ticket to receive your design.">
+                            سيتم إنشاء تذكرة Discord تلقائياً لك. يرجى التوجه إلى سيرفرنا وفتح التذكرة لاستلام تصميمك.
+                        </p>
+                        <a href="https://discord.gg/elitestudio" target="_blank" class="discord-btn">
+                            <i class="fab fa-discord"></i>
+                            <span data-ar="انضم إلى Discord" data-en="Join Discord">انضم إلى Discord</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content success-modal-content">
+            <div class="success-animation">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 data-ar="تم الدفع بنجاح!" data-en="Payment Successful!">تم الدفع بنجاح!</h2>
+            <p data-ar="شكراً لثقتك في Elite Studio" data-en="Thank you for trusting Elite Studio">شكراً لثقتك في Elite Studio</p>
+            
+            <div class="ticket-info">
+                <div class="ticket-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="ticket-details">
+                    <h3 data-ar="معلومات التذكرة" data-en="Ticket Information">معلومات التذكرة</h3>
+                    <p data-ar="رقم التذكرة:" data-en="Ticket Number:">رقم التذكرة: <strong id="ticketNumber">#0000</strong></p>
+                    <p class="ticket-instruction" data-ar="يرجى الانضمام إلى سيرفر Discord وفتح تذكرتك لبدء العمل على تصميمك" data-en="Please join Discord server and open your ticket to start working on your design">
+                        يرجى الانضمام إلى سيرفر Discord وفتح تذكرتك لبدء العمل على تصميمك
+                    </p>
+                </div>
+            </div>
+
+            <div class="success-actions">
+                <a href="https://discord.gg/elitestudio" target="_blank" class="btn btn-primary btn-large">
+                    <i class="fab fa-discord"></i>
+                    <span data-ar="افتح التذكرة في Discord" data-en="Open Ticket in Discord">افتح التذكرة في Discord</span>
+                </a>
+                <button class="btn btn-outline btn-large" onclick="closeSuccessModal()">
+                    <span data-ar="إغلاق" data-en="Close">إغلاق</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="protection.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
