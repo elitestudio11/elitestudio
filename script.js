@@ -2,7 +2,7 @@
 
 const DISCORD_CONFIG = {
     clientId: '1454839147163287645',
-redirectUri: 'https://elitestudio11.github.io/elite-studio/index.html',
+redirectUri: 'https://elitestudio11.github.io/elitestudio/',
     scope: 'identify email',
     authEndpoint: 'https://discord.com/api/oauth2/authorize',
     userEndpoint: 'https://discord.com/api/users/@me'
@@ -1035,4 +1035,5 @@ window.selectPlan = selectPlan;
 window.closeSuccessModal = closeSuccessModal;
 
 console.log('✅ Elite Studio Script Loaded Successfully');
+
 
