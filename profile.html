@@ -570,10 +570,22 @@
     </button>
 
     <script>
-        // API Configuration
-        // ⚠️ مهم: غيّر هذا إلى عنوان السيرفر الخاص بك
-        // مثال: 'https://your-server.com' أو 'http://your-vps-ip:3000'
-        const API_BASE_URL = 'http://localhost:3000'; // غيّر هذا لعنوان VPS أو Hosting
+        // Discord OAuth2 Configuration - نفس الإعدادات من script.js
+        const DISCORD_CONFIG = {
+            clientId: '1454839147163287645',
+            redirectUri: 'https://elitestudio11.github.io/elitestudio/profile.html',
+            scope: 'identify guilds guilds.members.read',
+            authEndpoint: 'https://discord.com/api/oauth2/authorize',
+            userEndpoint: 'https://discord.com/api/users/@me',
+            guildsEndpoint: 'https://discord.com/api/users/@me/guilds',
+            guildMemberEndpoint: 'https://discord.com/api/users/@me/guilds/{guild_id}/member'
+        };
+        
+        // معرف السيرفر (ضع معرف سيرفر Discord الخاص بك)
+        const GUILD_ID = 'YOUR_GUILD_ID_HERE'; // غيّره لمعرف سيرفرك
+        
+        let discordToken = null;
+        let discordUser = null;
 
         // Loading Screen
         window.addEventListener('load', () => {
@@ -642,150 +654,69 @@
             'achievement': 'fa-star'
         };
 
-        // Load user data from Discord bot API
+        // Load user data from Discord API directly
         async function loadUserProfile(userId) {
             try {
                 // عرض شاشة التحميل
                 document.getElementById('loadingScreen').classList.remove('hidden');
 
-                // جلب البيانات من API
-                const response = await fetch(`${API_BASE_URL}/api/user/${userId}`);
-                
-                if (!response.ok) {
+                // التحقق من وجود Token
+                if (!discordToken) {
+                    alert('يرجى تسجيل الدخول عبر Discord أولاً');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // جلب بيانات المستخدم من Discord API
+                const userResponse = await fetch(DISCORD_CONFIG.userEndpoint, {
+                    headers: {
+                        'Authorization': `Bearer ${discordToken}`
+                    }
+                });
+
+                if (!userResponse.ok) {
                     throw new Error('Failed to fetch user data');
                 }
 
-                const userData = await response.json();
+                const userData = await userResponse.json();
+                discordUser = userData;
 
-                // Update basic info
-                document.getElementById('userName').textContent = userData.globalName || userData.username;
-                document.getElementById('userTag').textContent = `@${userData.username}#${userData.discriminator}`;
-                document.getElementById('userId').textContent = userData.id;
-                document.getElementById('userAvatar').src = userData.avatar;
-                
-                // Update banner if exists
-                if (userData.banner) {
-                    const bannerEl = document.getElementById('profileBanner');
-                    bannerEl.style.backgroundImage = `url(${userData.banner})`;
-                    bannerEl.classList.add('custom-banner');
-                }
+                // جلب معلومات السيرفرات
+                const guildsResponse = await fetch(DISCORD_CONFIG.guildsEndpoint, {
+                    headers: {
+                        'Authorization': `Bearer ${discordToken}`
+                    }
+                });
 
-                // Update stats
-                document.getElementById('userPoints').textContent = userData.points.toLocaleString('ar-DZ');
-                document.getElementById('userLevel').textContent = userData.level;
-                document.getElementById('userMessages').textContent = userData.messages.toLocaleString('ar-DZ');
-                document.getElementById('joinDate').textContent = userData.serverJoined;
-                document.getElementById('accountCreated').textContent = userData.accountCreated;
-                document.getElementById('serverJoined').textContent = userData.serverJoined;
-                document.getElementById('boostStatus').textContent = userData.boosting ? 'معزز 🚀' : 'غير معزز';
-
-                // Update status
-                const statusElement = document.getElementById('userStatus');
-                statusElement.className = `profile-status status-${userData.status}`;
-
-                // Update badges
-                const badgesContainer = document.getElementById('userBadges');
-                badgesContainer.innerHTML = '';
-                
-                if (userData.badges.includes('admin')) {
-                    badgesContainer.innerHTML += `
-                        <span class="badge badge-premium">
-                            <i class="fas fa-crown"></i>
-                            مدير
-                        </span>
-                    `;
-                }
-                if (userData.badges.includes('premium')) {
-                    badgesContainer.innerHTML += `
-                        <span class="badge badge-premium">
-                            <i class="fas fa-gem"></i>
-                            بريميوم
-                        </span>
-                    `;
-                }
-                if (userData.badges.includes('staff')) {
-                    badgesContainer.innerHTML += `
-                        <span class="badge badge-staff">
-                            <i class="fas fa-shield-alt"></i>
-                            طاقم الإدارة
-                        </span>
-                    `;
-                }
-                if (userData.badges.includes('booster')) {
-                    badgesContainer.innerHTML += `
-                        <span class="badge badge-booster">
-                            <i class="fas fa-rocket"></i>
-                            معزز
-                        </span>
-                    `;
+                let memberData = null;
+                if (guildsResponse.ok) {
+                    const guilds = await guildsResponse.json();
+                    const targetGuild = guilds.find(g => g.id === GUILD_ID);
+                    
+                    if (targetGuild) {
+                        // جلب معلومات العضو في السيرفر
+                        const memberResponse = await fetch(
+                            DISCORD_CONFIG.guildMemberEndpoint.replace('{guild_id}', GUILD_ID),
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${discordToken}`
+                                }
+                            }
+                        );
+                        
+                        if (memberResponse.ok) {
+                            memberData = await memberResponse.json();
+                        }
+                    }
                 }
 
-                // Update roles
-                const rolesContainer = document.getElementById('userRoles');
-                rolesContainer.innerHTML = '';
-                
-                if (userData.roles && userData.roles.length > 0) {
-                    userData.roles.forEach(role => {
-                        const roleTag = document.createElement('div');
-                        roleTag.className = 'role-tag';
-                        roleTag.style.color = role.color;
-                        roleTag.style.borderColor = role.color;
-                        roleTag.innerHTML = `
-                            <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
-                            ${role.name}
-                        `;
-                        rolesContainer.appendChild(roleTag);
-                    });
-                } else {
-                    rolesContainer.innerHTML = '<p style="color: var(--muted);">لا توجد رتب</p>';
-                }
+                // حساب النقاط والمستوى (من localStorage أو افتراضي)
+                const points = parseInt(localStorage.getItem(`points_${userData.id}`)) || 0;
+                const messages = parseInt(localStorage.getItem(`messages_${userData.id}`)) || 0;
+                const level = Math.floor(points / 100) + 1;
 
-                // Update permissions
-                const permissionsContainer = document.getElementById('userPermissions');
-                permissionsContainer.innerHTML = '';
-                
-                if (userData.permissions && userData.permissions.length > 0) {
-                    userData.permissions.forEach(perm => {
-                        const icon = perm.icon || 'fa-check';
-                        const permItem = document.createElement('div');
-                        permItem.className = 'permission-item';
-                        permItem.innerHTML = `
-                            <div class="permission-icon">
-                                <i class="fas ${icon}"></i>
-                            </div>
-                            <span class="permission-name">${perm.name}</span>
-                        `;
-                        permissionsContainer.appendChild(permItem);
-                    });
-                } else {
-                    permissionsContainer.innerHTML = '<p style="color: var(--muted);">لا توجد صلاحيات خاصة</p>';
-                }
-
-                // Update activities
-                const activitiesContainer = document.getElementById('userActivity');
-                activitiesContainer.innerHTML = '';
-                
-                if (userData.activities && userData.activities.length > 0) {
-                    userData.activities.forEach(activity => {
-                        const icon = activityIcons[activity.type] || 'fa-circle';
-                        const activityItem = document.createElement('div');
-                        activityItem.className = 'activity-item';
-                        activityItem.innerHTML = `
-                            <div class="activity-header">
-                                <span class="activity-type">
-                                    <i class="fas ${icon}"></i> ${getActivityTypeName(activity.type)}
-                                </span>
-                                <span class="activity-time">${activity.timeAgo}</span>
-                            </div>
-                            <div class="activity-description">
-                                ${activity.description}
-                            </div>
-                        `;
-                        activitiesContainer.appendChild(activityItem);
-                    });
-                } else {
-                    activitiesContainer.innerHTML = '<p style="color: var(--muted);">لا يوجد نشاط حديث</p>';
-                }
+                // تحديث الواجهة
+                updateProfileUI(userData, memberData, points, level, messages);
 
                 // إخفاء شاشة التحميل
                 setTimeout(() => {
@@ -795,23 +726,190 @@
             } catch (error) {
                 console.error('Error loading user profile:', error);
                 
-                // إخفاء شاشة التحميل
                 document.getElementById('loadingScreen').classList.add('hidden');
                 
-                // عرض رسالة خطأ
-                alert('حدث خطأ في تحميل بيانات المستخدم. يرجى التأكد من تشغيل السيرفر والبوت.');
+                alert('حدث خطأ في تحميل بيانات المستخدم. يرجى المحاولة مرة أخرى.');
             }
         }
 
-        // دالة لتحويل نوع النشاط إلى اسم عربي
-        function getActivityTypeName(type) {
-            const types = {
-                'message': 'رسالة',
-                'voice': 'صوتي',
-                'role': 'رتبة',
-                'achievement': 'إنجاز'
-            };
-            return types[type] || 'نشاط';
+        function updateProfileUI(userData, memberData, points, level, messages) {
+            // Update basic info
+            const username = userData.global_name || userData.username;
+            document.getElementById('userName').textContent = username;
+            document.getElementById('userTag').textContent = `@${userData.username}`;
+            document.getElementById('userId').textContent = userData.id;
+            
+            // Update avatar
+            const avatarUrl = userData.avatar 
+                ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.${userData.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256`
+                : `https://cdn.discordapp.com/embed/avatars/${parseInt(userData.discriminator) % 5}.png`;
+            document.getElementById('userAvatar').src = avatarUrl;
+            
+            // Update banner if exists
+            if (userData.banner) {
+                const bannerUrl = `https://cdn.discordapp.com/banners/${userData.id}/${userData.banner}.${userData.banner.startsWith('a_') ? 'gif' : 'png'}?size=512`;
+                const bannerEl = document.getElementById('profileBanner');
+                bannerEl.style.backgroundImage = `url(${bannerUrl})`;
+                bannerEl.classList.add('custom-banner');
+            }
+
+            // Update stats
+            document.getElementById('userPoints').textContent = points.toLocaleString('ar-DZ');
+            document.getElementById('userLevel').textContent = level;
+            document.getElementById('userMessages').textContent = messages.toLocaleString('ar-DZ');
+            
+            // تواريخ Discord
+            const createdDate = new Date(Number((BigInt(userData.id) >> 22n) + 1420070400000n));
+            document.getElementById('accountCreated').textContent = createdDate.toLocaleDateString('ar-DZ');
+            
+            if (memberData && memberData.joined_at) {
+                const joinedDate = new Date(memberData.joined_at);
+                document.getElementById('joinDate').textContent = joinedDate.toLocaleDateString('ar-DZ');
+                document.getElementById('serverJoined').textContent = joinedDate.toLocaleDateString('ar-DZ');
+            } else {
+                document.getElementById('joinDate').textContent = 'غير متاح';
+                document.getElementById('serverJoined').textContent = 'غير متاح';
+            }
+
+            // Update status - افتراضي online لأن OAuth لا يعطي presence
+            const statusElement = document.getElementById('userStatus');
+            statusElement.className = 'profile-status status-online';
+
+            // Update badges
+            const badgesContainer = document.getElementById('userBadges');
+            badgesContainer.innerHTML = '';
+            
+            // Discord badges
+            if (userData.premium_type) {
+                badgesContainer.innerHTML += `
+                    <span class="badge badge-premium">
+                        <i class="fas fa-gem"></i>
+                        Nitro
+                    </span>
+                `;
+            }
+            
+            if (memberData && memberData.premium_since) {
+                badgesContainer.innerHTML += `
+                    <span class="badge badge-booster">
+                        <i class="fas fa-rocket"></i>
+                        معزز
+                    </span>
+                `;
+            }
+
+            if (points >= 1000) {
+                badgesContainer.innerHTML += `
+                    <span class="badge badge-staff">
+                        <i class="fas fa-star"></i>
+                        عضو نشط
+                    </span>
+                `;
+            }
+
+            // Update roles
+            const rolesContainer = document.getElementById('userRoles');
+            rolesContainer.innerHTML = '';
+            
+            if (memberData && memberData.roles && memberData.roles.length > 0) {
+                memberData.roles.forEach((roleId, index) => {
+                    const colors = ['#5865f2', '#57f287', '#fee75c', '#eb459e', '#ed4245'];
+                    const color = colors[index % colors.length];
+                    
+                    const roleTag = document.createElement('div');
+                    roleTag.className = 'role-tag';
+                    roleTag.style.color = color;
+                    roleTag.style.borderColor = color;
+                    roleTag.innerHTML = `
+                        <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+                        رتبة ${index + 1}
+                    `;
+                    rolesContainer.appendChild(roleTag);
+                });
+            } else {
+                rolesContainer.innerHTML = `
+                    <div class="role-tag" style="color: #99aab5; border-color: #99aab5;">
+                        <i class="fas fa-user"></i>
+                        عضو
+                    </div>
+                `;
+            }
+
+            // Update permissions - صلاحيات افتراضية للأعضاء
+            const permissionsContainer = document.getElementById('userPermissions');
+            permissionsContainer.innerHTML = '';
+            
+            const defaultPermissions = [
+                { name: 'إرسال الرسائل', icon: 'fa-comment' },
+                { name: 'القراءة', icon: 'fa-book' },
+                { name: 'إضافة ردود', icon: 'fa-reply' },
+                { name: 'إرفاق ملفات', icon: 'fa-paperclip' }
+            ];
+
+            defaultPermissions.forEach(perm => {
+                const permItem = document.createElement('div');
+                permItem.className = 'permission-item';
+                permItem.innerHTML = `
+                    <div class="permission-icon">
+                        <i class="fas ${perm.icon}"></i>
+                    </div>
+                    <span class="permission-name">${perm.name}</span>
+                `;
+                permissionsContainer.appendChild(permItem);
+            });
+
+            // Update activities - من localStorage
+            const activities = getStoredActivities(userData.id);
+            const activitiesContainer = document.getElementById('userActivity');
+            activitiesContainer.innerHTML = '';
+            
+            if (activities.length > 0) {
+                activities.forEach(activity => {
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+                    activityItem.innerHTML = `
+                        <div class="activity-header">
+                            <span class="activity-type">
+                                <i class="fas ${activity.icon}"></i> ${activity.type}
+                            </span>
+                            <span class="activity-time">${activity.time}</span>
+                        </div>
+                        <div class="activity-description">
+                            ${activity.description}
+                        </div>
+                    `;
+                    activitiesContainer.appendChild(activityItem);
+                });
+            } else {
+                activitiesContainer.innerHTML = `
+                    <div class="activity-item">
+                        <div class="activity-header">
+                            <span class="activity-type">
+                                <i class="fas fa-check"></i> انضمام
+                            </span>
+                            <span class="activity-time">مؤخراً</span>
+                        </div>
+                        <div class="activity-description">
+                            انضم إلى Elite Studio
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Update boost status
+            if (memberData && memberData.premium_since) {
+                document.getElementById('boostStatus').textContent = 'معزز 🚀';
+            } else {
+                document.getElementById('boostStatus').textContent = 'غير معزز';
+            }
+        }
+
+        function getStoredActivities(userId) {
+            const stored = localStorage.getItem(`activities_${userId}`);
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return [];
         }
 
         // Load profile when page loads
