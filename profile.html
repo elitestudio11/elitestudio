@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي | Elite Studio</title>
+    <meta name="description" content="عرض معلومات العضو في سيرفر Discord">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* إضافة بعض الستايلات الخاصة بصفحة البروفايل */
+        .profile-page {
+            min-height: 100vh;
+            padding: 120px 0 80px;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .profile-header {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-banner-section {
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            position: relative;
+        }
+
+        .profile-banner-section.custom-banner {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .profile-main-info {
+            padding: 0 40px 40px;
+            position: relative;
+            margin-top: -80px;
+        }
+
+        .profile-avatar-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 6px solid var(--panel);
+            overflow: hidden;
+            position: relative;
+            background: var(--panel-2);
+        }
+
+        .profile-avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-status {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 4px solid var(--panel);
+        }
+
+        .status-online { background: var(--success); }
+        .status-idle { background: var(--warning); }
+        .status-dnd { background: var(--error); }
+        .status-offline { background: var(--muted); }
+
+        .profile-info-main {
+            margin-top: 20px;
+        }
+
+        .profile-username {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .profile-discriminator {
+            font-size: 1.2rem;
+            color: var(--muted);
+            margin-bottom: 15px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-premium {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+        }
+
+        .badge-staff {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: var(--text);
+        }
+
+        .badge-booster {
+            background: linear-gradient(135deg, #ff73fa, #ffc0ff);
+            color: #000;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .profile-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .profile-section {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        .roles-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .role-tag {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 2px solid;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .permission-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .permission-name {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .activity-item {
+            padding: 15px;
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .activity-type {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .activity-description {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .user-info-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .info-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .profile-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .profile-main-info {
+                padding: 0 20px 30px;
+            }
+
+            .profile-username {
+                font-size: 1.5rem;
+            }
+
+            .permissions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 56px;
+            height: 56px;
+            background: var(--accent);
+            color: var(--text);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px var(--accent-glow);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Floating Elements -->
+    <div class="floating-element el-1"></div>
+    <div class="floating-element el-2"></div>
+    <div class="floating-element el-3"></div>
+    <div class="floating-element el-4"></div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-text">Elite Studio</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header" style="position: fixed; top: 0; width: 100%; z-index: 100;">
+        <div class="container">
+            <nav class="nav">
+                <div class="brand">
+                    <div class="logo">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <span class="brand-name">Elite <span class="brand-highlight">Studio</span></span>
+                </div>
+
+                <div class="nav-actions" style="margin-right: auto;">
+                    <div class="theme-toggle">
+                        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Profile Page -->
+    <div class="profile-page">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-banner-section" id="profileBanner">
+                    <!-- يمكن إضافة صورة بانر هنا -->
+                </div>
+                
+                <div class="profile-main-info">
+                    <div class="profile-avatar-container">
+                        <img id="userAvatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="User Avatar">
+                        <div class="profile-status status-online" id="userStatus"></div>
+                    </div>
+
+                    <div class="profile-info-main">
+                        <h1 class="profile-username" id="userName">اسم المستخدم</h1>
+                        <p class="profile-discriminator" id="userTag">@username#0000</p>
+
+                        <div class="profile-badges" id="userBadges">
+                            <!-- سيتم ملؤها ديناميكياً -->
+                        </div>
+
+                        <div class="profile-stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="userPoints">0</div>
+                                <div class="stat-label">النقاط</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="userLevel">1</div>
+                                <div class="stat-label">المستوى</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="userMessages">0</div>
+                                <div class="stat-label">الرسائل</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="joinDate">--</div>
+                                <div class="stat-label">تاريخ الانضمام</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Sections -->
+            <div class="profile-sections">
+                <!-- Roles Section -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-tag"></i>
+                        الرتب
+                    </h2>
+                    <div class="roles-list" id="userRoles">
+                        <!-- سيتم ملؤها ديناميكياً -->
+                        <div class="role-tag" style="color: #5865f2; border-color: #5865f2;">
+                            <i class="fas fa-crown"></i>
+                            مشرف
+                        </div>
+                        <div class="role-tag" style="color: #57f287; border-color: #57f287;">
+                            <i class="fas fa-check-circle"></i>
+                            عضو موثوق
+                        </div>
+                        <div class="role-tag" style="color: #fee75c; border-color: #fee75c;">
+                            <i class="fas fa-star"></i>
+                            عضو نشط
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Info Section -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        معلومات العضو
+                    </h2>
+                    <div class="user-info-grid">
+                        <div class="info-row">
+                            <span class="info-label">معرف المستخدم</span>
+                            <span class="info-value" id="userId">000000000000000000</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">تاريخ إنشاء الحساب</span>
+                            <span class="info-value" id="accountCreated">--/--/----</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">تاريخ الانضمام للسيرفر</span>
+                            <span class="info-value" id="serverJoined">--/--/----</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">حالة التعزيز</span>
+                            <span class="info-value" id="boostStatus">غير معزز</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions Section -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        الصلاحيات
+                    </h2>
+                    <div class="permissions-grid" id="userPermissions">
+                        <!-- سيتم ملؤها ديناميكياً -->
+                        <div class="permission-item">
+                            <div class="permission-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <span class="permission-name">إدارة السيرفر</span>
+                        </div>
+                        <div class="permission-item">
+                            <div class="permission-icon">
+                                <i class="fas fa-ban"></i>
+                            </div>
+                            <span class="permission-name">حظر الأعضاء</span>
+                        </div>
+                        <div class="permission-item">
+                            <div class="permission-icon">
+                                <i class="fas fa-user-slash"></i>
+                            </div>
+                            <span class="permission-name">طرد الأعضاء</span>
+                        </div>
+                        <div class="permission-item">
+                            <div class="permission-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <span class="permission-name">إرسال الرسائل</span>
+                        </div>
+                        <div class="permission-item">
+                            <div class="permission-icon">
+                                <i class="fas fa-hashtag"></i>
+                            </div>
+                            <span class="permission-name">إدارة القنوات</span>
+                        </div>
+                        <div class="permission-item">
+                            <div class="permission-icon">
+                                <i class="fas fa-user-tag"></i>
+                            </div>
+                            <span class="permission-name">إدارة الرتب</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Section -->
+                <div class="profile-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-history"></i>
+                        النشاط الأخير
+                    </h2>
+                    <div class="activity-list" id="userActivity">
+                        <div class="activity-item">
+                            <div class="activity-header">
+                                <span class="activity-type">
+                                    <i class="fas fa-message"></i> رسالة
+                                </span>
+                                <span class="activity-time">منذ 5 دقائق</span>
+                            </div>
+                            <div class="activity-description">
+                                أرسل رسالة في قناة #general
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-header">
+                                <span class="activity-type">
+                                    <i class="fas fa-microphone"></i> صوتي
+                                </span>
+                                <span class="activity-time">منذ ساعة</span>
+                            </div>
+                            <div class="activity-description">
+                                انضم إلى غرفة Voice Channel
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-header">
+                                <span class="activity-type">
+                                    <i class="fas fa-star"></i> إنجاز
+                                </span>
+                                <span class="activity-time">منذ يومين</span>
+                            </div>
+                            <div class="activity-description">
+                                حصل على رتبة "عضو نشط"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <button class="back-button" onclick="window.location.href='index.html'" title="العودة للرئيسية">
+        <i class="fas fa-arrow-right"></i>
+    </button>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3000'; // غيّر هذا إلى عنوان السيرفر الخاص بك
+
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                
+                // Update CSS variables for light theme
+                document.documentElement.style.setProperty('--bg', '#f5f5f5');
+                document.documentElement.style.setProperty('--panel', '#ffffff');
+                document.documentElement.style.setProperty('--panel-2', '#f9f9f9');
+                document.documentElement.style.setProperty('--text', '#1a1a1a');
+                document.documentElement.style.setProperty('--muted', '#666666');
+                document.documentElement.style.setProperty('--border', '#e0e0e0');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                
+                // Restore dark theme variables
+                document.documentElement.style.setProperty('--bg', '#0f0f0f');
+                document.documentElement.style.setProperty('--panel', '#161616');
+                document.documentElement.style.setProperty('--panel-2', '#1a1a1a');
+                document.documentElement.style.setProperty('--text', '#f3f3f3');
+                document.documentElement.style.setProperty('--muted', '#a0a0a0');
+                document.documentElement.style.setProperty('--border', '#242424');
+            }
+        }
+
+        // رموز الصلاحيات
+        const permissionIcons = {
+            'ADMINISTRATOR': 'fa-crown',
+            'MANAGE_GUILD': 'fa-user-shield',
+            'MANAGE_ROLES': 'fa-user-tag',
+            'MANAGE_CHANNELS': 'fa-hashtag',
+            'KICK_MEMBERS': 'fa-user-slash',
+            'BAN_MEMBERS': 'fa-ban',
+            'MANAGE_MESSAGES': 'fa-comment-slash',
+            'MANAGE_WEBHOOKS': 'fa-robot',
+            'MANAGE_EMOJIS_AND_STICKERS': 'fa-smile',
+            'VIEW_AUDIT_LOG': 'fa-history',
+            'MENTION_EVERYONE': 'fa-at',
+            'SEND_MESSAGES': 'fa-comment',
+            'MANAGE_THREADS': 'fa-comments',
+            'CREATE_INSTANT_INVITE': 'fa-link',
+            'MODERATE_MEMBERS': 'fa-gavel'
+        };
+
+        // رموز أنواع النشاط
+        const activityIcons = {
+            'message': 'fa-message',
+            'voice': 'fa-microphone',
+            'role': 'fa-user-tag',
+            'achievement': 'fa-star'
+        };
+
+        // Load user data from Discord bot API
+        async function loadUserProfile(userId) {
+            try {
+                // عرض شاشة التحميل
+                document.getElementById('loadingScreen').classList.remove('hidden');
+
+                // جلب البيانات من API
+                const response = await fetch(`${API_BASE_URL}/api/user/${userId}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const userData = await response.json();
+
+                // Update basic info
+                document.getElementById('userName').textContent = userData.globalName || userData.username;
+                document.getElementById('userTag').textContent = `@${userData.username}#${userData.discriminator}`;
+                document.getElementById('userId').textContent = userData.id;
+                document.getElementById('userAvatar').src = userData.avatar;
+                
+                // Update banner if exists
+                if (userData.banner) {
+                    const bannerEl = document.getElementById('profileBanner');
+                    bannerEl.style.backgroundImage = `url(${userData.banner})`;
+                    bannerEl.classList.add('custom-banner');
+                }
+
+                // Update stats
+                document.getElementById('userPoints').textContent = userData.points.toLocaleString('ar-DZ');
+                document.getElementById('userLevel').textContent = userData.level;
+                document.getElementById('userMessages').textContent = userData.messages.toLocaleString('ar-DZ');
+                document.getElementById('joinDate').textContent = userData.serverJoined;
+                document.getElementById('accountCreated').textContent = userData.accountCreated;
+                document.getElementById('serverJoined').textContent = userData.serverJoined;
+                document.getElementById('boostStatus').textContent = userData.boosting ? 'معزز 🚀' : 'غير معزز';
+
+                // Update status
+                const statusElement = document.getElementById('userStatus');
+                statusElement.className = `profile-status status-${userData.status}`;
+
+                // Update badges
+                const badgesContainer = document.getElementById('userBadges');
+                badgesContainer.innerHTML = '';
+                
+                if (userData.badges.includes('admin')) {
+                    badgesContainer.innerHTML += `
+                        <span class="badge badge-premium">
+                            <i class="fas fa-crown"></i>
+                            مدير
+                        </span>
+                    `;
+                }
+                if (userData.badges.includes('premium')) {
+                    badgesContainer.innerHTML += `
+                        <span class="badge badge-premium">
+                            <i class="fas fa-gem"></i>
+                            بريميوم
+                        </span>
+                    `;
+                }
+                if (userData.badges.includes('staff')) {
+                    badgesContainer.innerHTML += `
+                        <span class="badge badge-staff">
+                            <i class="fas fa-shield-alt"></i>
+                            طاقم الإدارة
+                        </span>
+                    `;
+                }
+                if (userData.badges.includes('booster')) {
+                    badgesContainer.innerHTML += `
+                        <span class="badge badge-booster">
+                            <i class="fas fa-rocket"></i>
+                            معزز
+                        </span>
+                    `;
+                }
+
+                // Update roles
+                const rolesContainer = document.getElementById('userRoles');
+                rolesContainer.innerHTML = '';
+                
+                if (userData.roles && userData.roles.length > 0) {
+                    userData.roles.forEach(role => {
+                        const roleTag = document.createElement('div');
+                        roleTag.className = 'role-tag';
+                        roleTag.style.color = role.color;
+                        roleTag.style.borderColor = role.color;
+                        roleTag.innerHTML = `
+                            <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+                            ${role.name}
+                        `;
+                        rolesContainer.appendChild(roleTag);
+                    });
+                } else {
+                    rolesContainer.innerHTML = '<p style="color: var(--muted);">لا توجد رتب</p>';
+                }
+
+                // Update permissions
+                const permissionsContainer = document.getElementById('userPermissions');
+                permissionsContainer.innerHTML = '';
+                
+                if (userData.permissions && userData.permissions.length > 0) {
+                    userData.permissions.forEach(perm => {
+                        const icon = perm.icon || 'fa-check';
+                        const permItem = document.createElement('div');
+                        permItem.className = 'permission-item';
+                        permItem.innerHTML = `
+                            <div class="permission-icon">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <span class="permission-name">${perm.name}</span>
+                        `;
+                        permissionsContainer.appendChild(permItem);
+                    });
+                } else {
+                    permissionsContainer.innerHTML = '<p style="color: var(--muted);">لا توجد صلاحيات خاصة</p>';
+                }
+
+                // Update activities
+                const activitiesContainer = document.getElementById('userActivity');
+                activitiesContainer.innerHTML = '';
+                
+                if (userData.activities && userData.activities.length > 0) {
+                    userData.activities.forEach(activity => {
+                        const icon = activityIcons[activity.type] || 'fa-circle';
+                        const activityItem = document.createElement('div');
+                        activityItem.className = 'activity-item';
+                        activityItem.innerHTML = `
+                            <div class="activity-header">
+                                <span class="activity-type">
+                                    <i class="fas ${icon}"></i> ${getActivityTypeName(activity.type)}
+                                </span>
+                                <span class="activity-time">${activity.timeAgo}</span>
+                            </div>
+                            <div class="activity-description">
+                                ${activity.description}
+                            </div>
+                        `;
+                        activitiesContainer.appendChild(activityItem);
+                    });
+                } else {
+                    activitiesContainer.innerHTML = '<p style="color: var(--muted);">لا يوجد نشاط حديث</p>';
+                }
+
+                // إخفاء شاشة التحميل
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 500);
+
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+                
+                // إخفاء شاشة التحميل
+                document.getElementById('loadingScreen').classList.add('hidden');
+                
+                // عرض رسالة خطأ
+                alert('حدث خطأ في تحميل بيانات المستخدم. يرجى التأكد من تشغيل السيرفر والبوت.');
+            }
+        }
+
+        // دالة لتحويل نوع النشاط إلى اسم عربي
+        function getActivityTypeName(type) {
+            const types = {
+                'message': 'رسالة',
+                'voice': 'صوتي',
+                'role': 'رتبة',
+                'achievement': 'إنجاز'
+            };
+            return types[type] || 'نشاط';
+        }
+
+        // Load profile when page loads
+        // يمكن استخدام URL parameter لتحديد المستخدم
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+        
+        if (userId) {
+            loadUserProfile(userId);
+        } else {
+            // إذا لم يتم تحديد userId، عرض رسالة
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                alert('يرجى تحديد معرف المستخدم في رابط الصفحة\nمثال: profile.html?userId=123456789');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
