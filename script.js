@@ -943,7 +943,53 @@ function generateRandomString(length) {
     }
     return result;
 }
+// دالة لفتح صفحة البروفايل
+function openProfilePage() {
+    window.location.href = 'profile.html';
+}
 
+// تحديث دالة updateProfileModal لتشمل زر البروفايل
+function updateProfileModal(user) {
+    // ... الكود الحالي ...
+    
+    // أضف زر الذهاب للبروفايل الكامل
+    const modal = document.getElementById('discordProfileModal');
+    if (modal) {
+        const profileButton = document.createElement('button');
+        profileButton.className = 'btn btn-primary';
+        profileButton.innerHTML = '<i class="fas fa-external-link-alt"></i> عرض الملف الكامل';
+        profileButton.onclick = openProfilePage;
+        
+        const actionsDiv = modal.querySelector('.modal-actions');
+        if (!actionsDiv) {
+            const actions = document.createElement('div');
+            actions.className = 'modal-actions';
+            actions.style.cssText = 'display: flex; gap: 10px; margin-top: 20px;';
+            actions.appendChild(profileButton);
+            modal.querySelector('.modal-content').appendChild(actions);
+        }
+    }
+}
+
+// جلب بيانات البروفايل من API البوت
+async function fetchUserProfileData(userId, token) {
+    try {
+        const response = await fetch('http://localhost:3000/api/user/profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId: userId })
+        });
+        
+        if (!response.ok) throw new Error('API Error');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching profile data:', error);
+        return null;
+    }
+}
 function showNotification(message, type = 'info') {
     // Remove existing notifications
     const existingNotifications = document.querySelectorAll('.notification');
@@ -1035,5 +1081,6 @@ window.selectPlan = selectPlan;
 window.closeSuccessModal = closeSuccessModal;
 
 console.log('✅ Elite Studio Script Loaded Successfully');
+
 
 
