@@ -404,9 +404,7 @@
     console.log('%c🛡️ Elite Studio Protection Active', 'color: #ff0000; font-size: 20px; font-weight: bold;');
     console.log('%cThis website is protected. Unauthorized access attempts are monitored.', 'color: #ff6b6b; font-size: 14px;');
 
-    // ===========================================
-    // Export configuration (for debugging in production)
-    // ===========================================
+
     
     // Only in development
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
@@ -416,17 +414,3 @@
 
 })();
 
-/**
- * Additional Security: Content Security Policy
- * Add this to your server headers or meta tag in HTML:
- * 
- * <meta http-equiv="Content-Security-Policy" content="
- *   default-src 'self';
- *   script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.paypal.com;
- *   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
- *   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
- *   img-src 'self' data: https:;
- *   connect-src 'self' https://discord.com https://api.anthropic.com;
- *   frame-ancestors 'none';
- * ">
- */
