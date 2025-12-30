@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -167,7 +166,7 @@
                         <i class="fas fa-download"></i>
                     </div>
                     <div>
-                        <div class="stat-number" id="totalDownloads">لم يحدد بعد</div>
+                        <div class="stat-number" id="totalDownloads">0</div>
                         <div class="stat-label">تحميل</div>
                     </div>
                 </div>
@@ -176,7 +175,7 @@
                         <i class="fas fa-star"></i>
                     </div>
                     <div>
-                        <div class="stat-number" id="avgRating">لم يحدد بعد</div>
+                        <div class="stat-number" id="avgRating">0</div>
                         <div class="stat-label">متوسط التقييم</div>
                     </div>
                 </div>
@@ -185,7 +184,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div>
-                        <div class="stat-number" id="activeUsers">لم يحدد بعد</div>
+                        <div class="stat-number" id="activeUsers">0</div>
                         <div class="stat-label">مستخدم نشط</div>
                     </div>
                 </div>
@@ -212,17 +211,8 @@
                     <button class="btn btn-outline btn-small active" onclick="filterProducts('all')" id="filterAll">
                         الكل
                     </button>
-                    <button class="btn btn-outline btn-small" onclick="filterProducts('management')" id="filterManagement">
-                        <i class="fas fa-cogs"></i> إدارة
-                    </button>
-                    <button class="btn btn-outline btn-small" onclick="filterProducts('music')" id="filterMusic">
-                        <i class="fas fa-music"></i> موسيقى
-                    </button>
-                    <button class="btn btn-outline btn-small" onclick="filterProducts('games')" id="filterGames">
-                        <i class="fas fa-gamepad"></i> ألعاب
-                    </button>
                     <button class="btn btn-outline btn-small" onclick="filterProducts('security')" id="filterSecurity">
-                        <i class="fas fa-shield-alt"></i> أمان
+                        <i class="fas fa-shield-alt"></i> حماية
                     </button>
                 </div>
             </div>
@@ -292,15 +282,15 @@
                     </h2>
                     <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px;">
                         <div style="text-align: center;">
-                            <div style="font-size: 3rem; font-weight: 800; color: var(--accent);">لم يحدد</div>
-                            <div style="color: var(--muted);">
-                                <i class="fas fa-star" style="color: #fbbf24;"></i>
-                                <i class="fas fa-star" style="color: #fbbf24;"></i>
-                                <i class="fas fa-star" style="color: #fbbf24;"></i>
-                                <i class="fas fa-star" style="color: #fbbf24;"></i>
-                                <i class="fas fa-star-half-alt" style="color: #fbbf24;"></i>
+                            <div style="font-size: 3rem; font-weight: 800; color: var(--accent);" id="overallRating">0</div>
+                            <div style="color: var(--muted);" id="ratingStars">
+                                <i class="fas fa-star" style="color: #ccc;"></i>
+                                <i class="fas fa-star" style="color: #ccc;"></i>
+                                <i class="fas fa-star" style="color: #ccc;"></i>
+                                <i class="fas fa-star" style="color: #ccc;"></i>
+                                <i class="fas fa-star" style="color: #ccc;"></i>
                             </div>
-                            <div style="color: var(--muted); font-size: 0.9rem; margin-top: 5px;">بناءً على 0 تقييم</div>
+                            <div style="color: var(--muted); font-size: 0.9rem; margin-top: 5px;" id="reviewsCount">بناءً على 0 تقييم</div>
                         </div>
                     </div>
                 </div>
@@ -500,13 +490,19 @@
     </button>
 
     <script>
-        // استيراد الدوال المشتركة
-        const scriptModule = {};
-        
         // تعريف المتغيرات
         let currentUser = null;
         let selectedBot = null;
         let currentReviewRating = 0;
+        let reviews = [];
+        let totalDownloads = 0;
+        let storeStats = {
+            botsCount: 1,  // عدد البوتات الحقيقي
+            totalDownloads: 0,
+            avgRating: 0,
+            activeUsers: 0,
+            totalReviews: 0
+        };
         
         // تعريف الدوال الأساسية
         function toggleTheme() {
@@ -543,14 +539,17 @@
             // تحميل بيانات المستخدم
             loadUserData();
             
+            // تحميل التقييمات من localStorage
+            loadReviewsFromStorage();
+            
             // تحميل المنتجات
             loadProducts();
             
-            // تحميل التقييمات
-            loadReviews();
-            
             // تحميل إحصائيات المتجر
             loadStoreStats();
+            
+            // تحميل عدد التحميلات من localStorage
+            loadDownloadsFromStorage();
             
             // تهيئة نظام النجوم للتقييم
             initRatingStars();
@@ -560,6 +559,9 @@
             
             // تهيئة أحداث التمرير
             initScrollEffects();
+            
+            // تحديث واجهة الإحصائيات
+            updateStatsDisplay();
         });
         
         // نظام اللغة
@@ -592,10 +594,7 @@
                     totalDownloads: 'تحميل',
                     activeUsers: 'مستخدم نشط',
                     allProducts: 'الكل',
-                    management: 'إدارة',
-                    music: 'موسيقى',
-                    games: 'ألعاب',
-                    security: 'أمان',
+                    security: 'حماية',
                     addReview: 'أضف تقييم',
                     cancel: 'إلغاء',
                     submitReview: 'نشر التقييم'
@@ -611,9 +610,6 @@
                     totalDownloads: 'Downloads',
                     activeUsers: 'Active Users',
                     allProducts: 'All',
-                    management: 'Management',
-                    music: 'Music',
-                    games: 'Games',
                     security: 'Security',
                     addReview: 'Add Review',
                     cancel: 'Cancel',
@@ -691,8 +687,7 @@
             
             const badges = [
                 { type: 'downloader', label: 'محمِّل', icon: 'download', color: '#10b981' },
-                { type: 'reviewer', label: 'مقيِّم', icon: 'star', color: '#f59e0b' },
-                { type: 'vip', label: 'VIP', icon: 'crown', color: '#8b5cf6' }
+                { type: 'reviewer', label: 'مقيِّم', icon: 'star', color: '#f59e0b' }
             ];
             
             badges.forEach(badge => {
@@ -722,18 +717,17 @@
             const products = [
                 {
                     id: 1,
-                    name: 'بوت سكيوريتي ',
-                    description: '    وت حماية جديد لسيرفرك مع خصائص عديدة    ',
-                    downloads: 10,
-                    rating: 4.8,
-                    category: 'management',
-                    features: [' حماية ضد تخريب', ' حماية ضد سبام', 'حماية ضد حذف رومات  ', 'نظام وايت ليست  '],
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_1',
+                    name: 'بوت سكيوريتي',
+                    description: 'بوت حماية جديد لسيرفرك مع خصائص عديدة',
+                    downloads: storeStats.totalDownloads,
+                    rating: storeStats.avgRating,
+                    category: 'security',
+                    features: ['حماية ضد تخريب', 'حماية ضد سبام', 'حماية ضد حذف رومات', 'نظام وايت ليست'],
+                    downloadLink: '#',
                     fileSize: '0 MB',
-                    version: '1',
+                    version: '1.0',
                     lastUpdate: '2025-12-30'
-                },
-              
+                }
             ];
             
             productsGrid.innerHTML = '';
@@ -747,14 +741,14 @@
         function createProductCard(product) {
             const div = document.createElement('div');
             div.className = 'pricing-card';
-            if (product.downloads > 2000) div.classList.add('pricing-featured');
             
-            // توليد النجوم
+            // توليد النجوم بناءً على التقييم الحقيقي
             let stars = '';
+            const rating = product.rating || 0;
             for (let i = 1; i <= 5; i++) {
-                if (i <= Math.floor(product.rating)) {
+                if (i <= Math.floor(rating)) {
                     stars += '<i class="fas fa-star" style="color: #fbbf24;"></i>';
-                } else if (i === Math.ceil(product.rating) && product.rating % 1 !== 0) {
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
                     stars += '<i class="fas fa-star-half-alt" style="color: #fbbf24;"></i>';
                 } else {
                     stars += '<i class="far fa-star" style="color: #ccc;"></i>';
@@ -762,11 +756,9 @@
             }
             
             div.innerHTML = `
-                ${product.downloads > 2000 ? '<div class="pricing-badge">الأكثر تحميلاً</div>' : ''}
-                
                 <div class="pricing-header">
                     <div class="pricing-icon">
-                        <i class="fas fa-robot"></i>
+                        <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3 class="pricing-title">${product.name}</h3>
                 </div>
@@ -791,13 +783,10 @@
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                     <div style="display: flex; align-items: center; gap: 5px;">
                         ${stars}
-                        <span style="color: var(--muted); font-size: 0.9rem;">${product.rating} (${product.downloads.toLocaleString()})</span>
+                        <span style="color: var(--muted); font-size: 0.9rem;">${rating.toFixed(1)} (${product.downloads})</span>
                     </div>
                     <div style="color: var(--muted); font-size: 0.9rem;">
-                        ${product.category === 'management' ? 'إدارة' : 
-                          product.category === 'music' ? 'موسيقى' :
-                          product.category === 'games' ? 'ألعاب' :
-                          product.category === 'security' ? 'أمان' : 'تحليلات'}
+                        حماية
                     </div>
                 </div>
                 
@@ -815,16 +804,38 @@
             return div;
         }
         
-        // تحميل التقييمات
-        function loadReviews() {
+        // تحميل التقييمات من localStorage
+        function loadReviewsFromStorage() {
+            const savedReviews = localStorage.getItem('elite_studio_reviews');
+            if (savedReviews) {
+                reviews = JSON.parse(savedReviews);
+            }
+            displayReviews();
+            updateRatingStats();
+        }
+        
+        // حفظ التقييمات في localStorage
+        function saveReviewsToStorage() {
+            localStorage.setItem('elite_studio_reviews', JSON.stringify(reviews));
+        }
+        
+        // عرض التقييمات
+        function displayReviews() {
             const reviewsList = document.getElementById('reviewsList');
             if (!reviewsList) return;
             
-            const reviews = [
- 
-            ];
-            
             reviewsList.innerHTML = '';
+            
+            if (reviews.length === 0) {
+                reviewsList.innerHTML = `
+                    <div style="text-align: center; color: var(--muted); padding: 40px;">
+                        <i class="fas fa-comment-slash" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <p>لا توجد تقييمات بعد. كن أول من يقيِّم!</p>
+                    </div>
+                `;
+                return;
+            }
+            
             reviews.forEach(review => {
                 const reviewElement = createReviewCard(review);
                 reviewsList.appendChild(reviewElement);
@@ -860,7 +871,7 @@
                             <h4 style="margin: 0; color: white;">${review.user.name}</h4>
                             <div style="display: flex; align-items: center; gap: 5px;">
                                 ${stars}
-                                ${review.verified ? '<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">✓ مستخدم مؤكد</span>' : ''}
+                                <span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">✓ مستخدم مؤكد</span>
                             </div>
                         </div>
                         <div style="color: var(--muted); font-size: 0.9rem; margin-top: 5px;">
@@ -878,17 +889,36 @@
         
         // تحميل إحصائيات المتجر
         function loadStoreStats() {
-            const stats = {
-                botsCount: 25,
-                totalDownloads: 10250,
-                avgRating: 4.8,
-                activeUsers: 5800
-            };
+            // لا نحتاج لهذه الدالة بعد الآن، لأننا نحدّث الإحصائيات بشكل ديناميكي
+            updateStatsDisplay();
+        }
+        
+        // تحديث عرض الإحصائيات
+        function updateStatsDisplay() {
+            // تحديث عدد البوتات (الحقيقي)
+            document.getElementById('botsCount').textContent = storeStats.botsCount;
             
-            document.getElementById('botsCount').textContent = stats.botsCount;
-            document.getElementById('totalDownloads').textContent = stats.totalDownloads.toLocaleString();
-            document.getElementById('avgRating').textContent = stats.avgRating;
-            document.getElementById('activeUsers').textContent = stats.activeUsers.toLocaleString();
+            // تحديث عدد التحميلات
+            document.getElementById('totalDownloads').textContent = storeStats.totalDownloads;
+            
+            // تحديث متوسط التقييم
+            document.getElementById('avgRating').textContent = storeStats.avgRating.toFixed(1);
+            
+            // تحديث عدد المستخدمين النشطين
+            document.getElementById('activeUsers').textContent = storeStats.activeUsers;
+        }
+        
+        // تحميل عدد التحميلات من localStorage
+        function loadDownloadsFromStorage() {
+            const savedDownloads = localStorage.getItem('elite_studio_downloads');
+            if (savedDownloads) {
+                storeStats.totalDownloads = parseInt(savedDownloads);
+            }
+        }
+        
+        // حفظ عدد التحميلات في localStorage
+        function saveDownloadsToStorage() {
+            localStorage.setItem('elite_studio_downloads', storeStats.totalDownloads.toString());
         }
         
         // تهيئة نظام النجوم
@@ -977,19 +1007,18 @@
                 return;
             }
             
-            // إرسال التقييم (محاكاة)
-            showNotification('شكراً لتقييمك! تم إرسال التقييم بنجاح.', 'success');
+            if (!currentUser) {
+                showNotification('يرجى ربط حساب Discord أولاً', 'error');
+                return;
+            }
             
-            // إعادة تعيين النموذج
-            cancelReview();
-            
-            // إضافة التقييم الجديد إلى القائمة
+            // إنشاء التقييم الجديد
             const newReview = {
                 id: Date.now(),
                 user: {
                     name: currentUser.globalName || currentUser.username,
                     avatar: currentUser.avatarUrl,
-                    role: 'مستخدم جديد'
+                    role: 'مستخدم'
                 },
                 rating: rating,
                 comment: comment,
@@ -997,11 +1026,73 @@
                 verified: true
             };
             
-            const reviewsList = document.getElementById('reviewsList');
-            if (reviewsList) {
-                const reviewElement = createReviewCard(newReview);
-                reviewsList.insertBefore(reviewElement, reviewsList.firstChild);
+            // إضافة التقييم إلى المصفوفة
+            reviews.push(newReview);
+            
+            // حفظ التقييمات في localStorage
+            saveReviewsToStorage();
+            
+            // تحديث إحصائيات التقييم
+            updateRatingStats();
+            
+            // تحديث عرض التقييمات
+            displayReviews();
+            
+            // إعادة تعيين النموذج
+            cancelReview();
+            
+            // عرض إشعار النجاح
+            showNotification('شكراً لتقييمك! تم إرسال التقييم بنجاح.', 'success');
+            
+            // زيادة عدد المستخدمين النشطين
+            storeStats.activeUsers++;
+            updateStatsDisplay();
+        }
+        
+        // تحديث إحصائيات التقييم
+        function updateRatingStats() {
+            if (reviews.length === 0) {
+                storeStats.avgRating = 0;
+                storeStats.totalReviews = 0;
+            } else {
+                const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+                storeStats.avgRating = totalRating / reviews.length;
+                storeStats.totalReviews = reviews.length;
             }
+            
+            // تحديث العرض
+            document.getElementById('overallRating').textContent = storeStats.avgRating.toFixed(1);
+            document.getElementById('reviewsCount').textContent = `بناءً على ${storeStats.totalReviews} تقييم`;
+            
+            // تحديث النجوم
+            updateRatingStarsDisplay();
+            
+            // تحديث الإحصائيات العامة
+            updateStatsDisplay();
+            
+            // إعادة تحميل المنتجات لتحديث التقييمات
+            loadProducts();
+        }
+        
+        // تحديث عرض النجوم
+        function updateRatingStarsDisplay() {
+            const ratingStars = document.getElementById('ratingStars');
+            if (!ratingStars) return;
+            
+            let starsHtml = '';
+            const rating = storeStats.avgRating;
+            
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    starsHtml += '<i class="fas fa-star" style="color: #fbbf24;"></i>';
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                    starsHtml += '<i class="fas fa-star-half-alt" style="color: #fbbf24;"></i>';
+                } else {
+                    starsHtml += '<i class="fas fa-star" style="color: #ccc;"></i>';
+                }
+            }
+            
+            ratingStars.innerHTML = starsHtml;
         }
         
         // تحميل البوت
@@ -1037,79 +1128,36 @@
                 }
                 
                 // زيادة عدد التحميلات
-                updateDownloadCount(botId);
+                updateDownloadCount();
             }, 2000);
         }
         
         // الحصول على البوت بواسطة المعرف
         function getBotById(botId) {
-            const bots = [
-                {
-                    id: 1,
-                    name: 'بوت الإدارة المتقدم',
-                    description: 'بوت شامل لإدارة سيرفرات Discord',
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_1',
-                    fileSize: '15.2 MB',
-                    version: '2.4.1',
-                    instructions: '1. قم بتحميل الملف<br>2. استخراج الملف المضغوط<br>3. تشغيل setup.exe<br>4. اتبع التعليمات على الشاشة'
-                },
-                {
-                    id: 2,
-                    name: 'بوت الموسيقى الاحترافي',
-                    description: 'بوت موسيقى بجودة عالية',
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_2',
-                    fileSize: '22.7 MB',
-                    version: '3.1.0',
-                    instructions: '1. قم بتحميل الملف<br>2. افتح ملف التثبيت<br>3. اتبع خطوات التثبيت<br>4. أدخل التوكن الخاص بك'
-                },
-                {
-                    id: 3,
-                    name: 'بوت التذاكر الذكي',
-                    description: 'نظام تذاكر متكامل',
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_3',
-                    fileSize: '18.5 MB',
-                    version: '1.8.2',
-                    instructions: '1. قم بتحميل الملف<br>2. استخراج المحتويات<br>3. تعديل ملف config.js<br>4. تشغيل البوت'
-                },
-                {
-                    id: 4,
-                    name: 'بوت الألعاب والتسلية',
-                    description: 'ألعاب وتسلية داخل السيرفر',
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_4',
-                    fileSize: '28.3 MB',
-                    version: '4.2.0',
-                    instructions: '1. قم بتحميل الملف<br>2. تشغيل installer.bat<br>3. اتبع التعليمات<br>4. استمتع بالألعاب!'
-                },
-                {
-                    id: 5,
-                    name: 'بوت الأمان والحماية',
-                    description: 'حماية متكاملة من الهجمات',
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_5',
-                    fileSize: '20.1 MB',
-                    version: '3.5.3',
-                    instructions: '1. قم بتحميل الملف<br>2. فك الضغط<br>3. تعديل الإعدادات<br>4. تشغيل start.bat'
-                },
-                {
-                    id: 6,
-                    name: 'بوت التحليلات والإحصائيات',
-                    description: 'تحليل شامل لنشاط السيرفر',
-                    downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_6',
-                    fileSize: '17.8 MB',
-                    version: '2.1.4',
-                    instructions: '1. قم بتحميل الملف<br>2. استخراج المحتويات<br>3. تشغيل البوت<br>4. تكوين لوحة التحكم'
-                }
-            ];
-            
-            return bots.find(bot => bot.id === botId);
+            return {
+                id: 1,
+                name: 'بوت سكيوريتي',
+                description: 'بوت حماية جديد لسيرفرك مع خصائص عديدة',
+                downloadLink: 'https://drive.google.com/uc?export=download&id=EXAMPLE_LINK_1',
+                fileSize: '0 MB',
+                version: '1.0',
+                instructions: '1. قم بتحميل الملف<br>2. استخراج الملف المضغوط<br>3. تشغيل setup.exe<br>4. اتبع التعليمات على الشاشة'
+            };
         }
         
         // تحديث عدد التحميلات
-        function updateDownloadCount(botId) {
-            const totalDownloads = document.getElementById('totalDownloads');
-            if (totalDownloads) {
-                const current = parseInt(totalDownloads.textContent.replace(',', '')) || 10250;
-                totalDownloads.textContent = (current + 1).toLocaleString();
-            }
+        function updateDownloadCount() {
+            // زيادة عدد التحميلات
+            storeStats.totalDownloads++;
+            
+            // حفظ في localStorage
+            saveDownloadsToStorage();
+            
+            // تحديث العرض
+            updateStatsDisplay();
+            
+            // إعادة تحميل المنتجات لتحديث عدد التحميلات
+            loadProducts();
             
             showNotification('تم زيادة عدد التحميلات', 'success');
         }
@@ -1208,7 +1256,7 @@
         // تصفية المنتجات
         function filterProducts(filter) {
             // إزالة التفعيل من جميع الأزرار
-            const buttons = ['filterAll', 'filterManagement', 'filterMusic', 'filterGames', 'filterSecurity'];
+            const buttons = ['filterAll', 'filterSecurity'];
             buttons.forEach(btn => {
                 const button = document.getElementById(btn);
                 if (button) {
@@ -1224,17 +1272,13 @@
                 activeButton.classList.add('btn-primary', 'active');
             }
             
-            // هنا يمكن تطبيق التصفية على المنتجات
             showNotification(`عرض ${getFilterText(filter)} البوتات`, 'info');
         }
         
         function getFilterText(filter) {
             const filters = {
                 'all': 'جميع',
-                'management': 'الإدارة',
-                'music': 'الموسيقى',
-                'games': 'الألعاب',
-                'security': 'الأمان'
+                'security': 'الحماية'
             };
             return filters[filter] || filter;
         }
@@ -1332,6 +1376,10 @@
                         localStorage.setItem('discord_user', JSON.stringify(user));
                         localStorage.setItem('discord_token', token);
                         currentUser = user;
+                        
+                        // زيادة عدد المستخدمين النشطين
+                        storeStats.activeUsers++;
+                        updateStatsDisplay();
                         
                         // تحديث الواجهة
                         updateUserInterface();
@@ -1470,6 +1518,11 @@
                 .faq-item:hover {
                     border-color: var(--accent);
                     transform: translateY(-2px);
+                }
+                
+                .stat-number {
+                    font-size: 2.5rem !important;
+                    font-weight: 800 !important;
                 }
             </style>
         `);
