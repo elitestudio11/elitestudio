@@ -4,181 +4,349 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الملف الشخصي | Elite Studio</title>
-    <meta name="description" content="عرض معلومات العضو في سيرفر Discord">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 4px solid #1a1a2e;
+        }
+
+        .status-online { background: #43b581; }
+        .status-idle { background: #faa61a; }
+        .status-dnd { background: #f04747; }
+        .status-offline { background: #747f8d; }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .user-tag {
+            color: #b8b8b8;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .badges-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-owner {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+        }
+
+        .badge-booster {
+            background: rgba(244, 63, 159, 0.2);
+            border: 1px solid #f43f9f;
+            color: #f43f9f;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #5865f2;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #b8b8b8;
+            font-size: 0.9rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .detail-card h3 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            color: #b8b8b8;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: white;
+            font-weight: bold;
+        }
+
+        .roles-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .role-pill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .permission-icon {
+            color: #43b581;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5rem;
+        }
+
+        .error {
+            background: rgba(240, 71, 71, 0.2);
+            border: 1px solid #f04747;
+            color: #f04747;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: rgba(88, 101, 242, 0.2);
+            border: 1px solid #5865f2;
+            color: #5865f2;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: rgba(88, 101, 242, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
-<body data-theme="dark">
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader">
-            <div class="loader-circle"></div>
-            <div class="loader-text">Elite Studio</div>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn" style="margin-bottom: 30px;">
+            <i class="fas fa-arrow-right"></i>
+            <span>العودة للرئيسية</span>
+        </a>
+
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>جاري تحميل البيانات...</p>
         </div>
-    </div>
 
-    <!-- Header -->
-    <header class="header" id="header" style="position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px);">
-        <div class="container">
-            <nav class="nav">
-                <div class="brand">
-                    <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                        <div class="logo">
-                            <i class="fas fa-palette"></i>
+        <div id="error" style="display: none;"></div>
+
+        <div id="profileContent" style="display: none;">
+            <!-- Profile Header -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        <img id="profileAvatar" src="" alt="Avatar">
+                        <div class="status-indicator" id="statusIndicator"></div>
+                    </div>
+
+                    <div class="user-info">
+                        <h1 id="profileUsername">Loading...</h1>
+                        <p class="user-tag" id="profileTag">@username</p>
+                        
+                        <div class="badges-container" id="badgesContainer"></div>
+
+                        <div class="profile-stats">
+                            <div class="stat-box">
+                                <div class="stat-value" id="rolesCount">0</div>
+                                <div class="stat-label">الرتب</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="permissionsCount">0</div>
+                                <div class="stat-label">الصلاحيات</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="statusText">غير متصل</div>
+                                <div class="stat-label">الحالة</div>
+                            </div>
                         </div>
-                        <span class="brand-name">Elite <span class="brand-highlight">Studio</span></span>
-                    </a>
+                    </div>
                 </div>
+            </div>
 
-                <div class="nav-actions">
-                    <div class="theme-toggle">
-                        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
-                            <i class="fas fa-moon" id="themeIcon"></i>
-                        </button>
+            <!-- Details Grid -->
+            <div class="details-grid">
+                <!-- معلومات الحساب -->
+                <div class="detail-card">
+                    <h3>
+                        <i class="fas fa-id-card"></i>
+                        معلومات الحساب
+                    </h3>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">معرف المستخدم</div>
+                        <div class="detail-value" id="userId" style="font-family: monospace;">-</div>
                     </div>
                     
-                    <div class="language-switcher">
-                        <button class="language-btn" id="languageBtn">
-                            <i class="fas fa-globe"></i>
-                            <span id="currentLang">AR</span>
-                        </button>
+                    <div class="detail-item">
+                        <div class="detail-label">تاريخ الانضمام للسيرفر</div>
+                        <div class="detail-value" id="serverJoined">-</div>
                     </div>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Profile Page Content -->
-    <div class="profile-page" style="min-height: 100vh; padding: 120px 0 80px; background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);">
-        <div class="container">
-            <div class="profile-container">
-                <!-- Back Button -->
-                <a href="index.html" class="btn btn-outline" style="margin-bottom: 30px; display: inline-flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-arrow-right"></i>
-                    <span>العودة للرئيسية</span>
-                </a>
-
-                <!-- Profile Header -->
-                <div class="profile-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; margin-bottom: 30px;">
-                    <div class="profile-header" style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
-                        <!-- Avatar -->
-                        <div class="avatar-container" style="position: relative;">
-                            <img id="profileAvatar" src="" alt="Avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 5px solid rgba(255, 255, 255, 0.1);">
-                            <div class="status-indicator" id="statusIndicator" style="position: absolute; bottom: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; border: 4px solid #1a1a2e;"></div>
-                        </div>
-
-                        <!-- User Info -->
-                        <div class="user-info" style="flex: 1;">
-                            <h1 id="profileUsername" style="font-size: 2.5rem; margin: 0 0 10px 0; color: white;">Loading...</h1>
-                            <p id="profileTag" style="color: #b8b8b8; margin: 0 0 20px 0; font-size: 1.2rem;">@username#0000</p>
-                            
-                            <!-- Badges -->
-                            <div class="badges-container" id="badgesContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                                <!-- سيتم ملؤها ديناميكياً -->
-                            </div>
-
-                            <!-- Stats -->
-                            <div class="profile-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
-                                <div class="stat-box">
-                                    <div class="stat-value" id="pointsStat">0</div>
-                                    <div class="stat-label">النقاط</div>
-                                </div>
-                                <div class="stat-box">
-                                    <div class="stat-value" id="levelStat">1</div>
-                                    <div class="stat-label">المستوى</div>
-                                </div>
-                                <div class="stat-box">
-                                    <div class="stat-value" id="messagesStat">0</div>
-                                    <div class="stat-label">الرسائل</div>
-                                </div>
-                                <div class="stat-box">
-                                    <div class="stat-value" id="rankStat">#0</div>
-                                    <div class="stat-label">الترتيب</div>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">اسم العرض</div>
+                        <div class="detail-value" id="displayName">-</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">بوت</div>
+                        <div class="detail-value" id="isBot">-</div>
                     </div>
                 </div>
 
-                <!-- Details Grid -->
-                <div class="details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-                    <!-- User Details -->
-                    <div class="detail-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px;">
-                        <h3 style="color: white; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-id-card"></i>
-                            معلومات الحساب
-                        </h3>
-                        
-                        <div class="detail-item" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-                            <div style="color: #b8b8b8; font-size: 0.9rem;">معرف المستخدم</div>
-                            <div id="userId" style="color: white; font-weight: bold; font-family: monospace;">000000000000000000</div>
-                        </div>
-                        
-                        <div class="detail-item" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-                            <div style="color: #b8b8b8; font-size: 0.9rem;">تاريخ الإنشاء</div>
-                            <div id="accountCreated" style="color: white;">--/--/----</div>
-                        </div>
-                        
-                        <div class="detail-item" style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-                            <div style="color: #b8b8b8; font-size: 0.9rem;">تاريخ الانضمام</div>
-                            <div id="serverJoined" style="color: white;">--/--/----</div>
-                        </div>
-                        
-                        <div class="detail-item">
-                            <div style="color: #b8b8b8; font-size: 0.9rem;">البريد الإلكتروني</div>
-                            <div id="userEmail" style="color: white;">غير متاح</div>
-                        </div>
+                <!-- الرتب -->
+                <div class="detail-card">
+                    <h3>
+                        <i class="fas fa-user-tag"></i>
+                        الرتب
+                    </h3>
+                    
+                    <div class="roles-container" id="rolesContainer">
+                        <p style="color: #b8b8b8;">لا توجد رتب</p>
                     </div>
+                </div>
 
-                    <!-- Roles -->
-                    <div class="detail-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px;">
-                        <h3 style="color: white; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-user-tag"></i>
-                            الرتب <span id="rolesCount" style="background: rgba(255, 255, 255, 0.1); padding: 2px 10px; border-radius: 20px; font-size: 0.9rem;">0</span>
-                        </h3>
-                        
-                        <div class="roles-container" id="rolesContainer" style="display: flex; flex-wrap: wrap; gap: 10px;">
-                            <!-- سيتم ملؤها ديناميكياً -->
-                            <div class="role-pill" style="padding: 8px 16px; background: rgba(88, 101, 242, 0.2); border: 1px solid #5865f2; border-radius: 20px; color: #5865f2; font-size: 0.9rem;">
-                                <i class="fas fa-user-shield"></i> Admin
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Permissions -->
-                    <div class="detail-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px;">
-                        <h3 style="color: white; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-shield-alt"></i>
-                            الصلاحيات
-                        </h3>
-                        
-                        <div class="permissions-grid" id="permissionsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
-                            <!-- سيتم ملؤها ديناميكياً -->
-                        </div>
-                    </div>
-
-                    <!-- Recent Activity -->
-                    <div class="detail-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px;">
-                        <h3 style="color: white; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-history"></i>
-                            النشاط الأخير
-                        </h3>
-                        
-                        <div class="activity-list" id="activityList">
-                            <!-- سيتم ملؤها ديناميكياً -->
-                            <div class="activity-item" style="padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; margin-bottom: 10px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                    <span style="color: white; font-size: 0.9rem;">
-                                        <i class="fas fa-comment"></i> رسالة
-                                    </span>
-                                    <span style="color: #b8b8b8; font-size: 0.8rem;">منذ 5 دقائق</span>
-                                </div>
-                                <div style="color: #b8b8b8; font-size: 0.9rem;">أرسل رسالة في #general</div>
-                            </div>
-                        </div>
+                <!-- الصلاحيات -->
+                <div class="detail-card">
+                    <h3>
+                        <i class="fas fa-shield-alt"></i>
+                        الصلاحيات
+                    </h3>
+                    
+                    <div class="permissions-grid" id="permissionsGrid">
+                        <p style="color: #b8b8b8;">لا توجد صلاحيات</p>
                     </div>
                 </div>
             </div>
@@ -186,502 +354,173 @@
     </div>
 
     <script>
-        // تنسيقات إضافية
-        document.head.insertAdjacentHTML('beforeend', `
-            <style>
-                .profile-page {
-                    min-height: 100vh;
-                }
-                
-                .profile-container {
-                    max-width: 1400px;
-                    margin: 0 auto;
-                }
-                
-                .stat-box {
-                    background: rgba(255, 255, 255, 0.05);
-                    border-radius: 10px;
-                    padding: 15px;
-                    text-align: center;
-                }
-                
-                .stat-value {
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #7289da;
-                    margin-bottom: 5px;
-                }
-                
-                .stat-label {
-                    color: #b8b8b8;
-                    font-size: 0.9rem;
-                }
-                
-                .permission-item {
-                    padding: 8px 12px;
-                    background: rgba(255, 255, 255, 0.05);
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-size: 0.9rem;
-                }
-                
-                .permission-icon {
-                    color: #7289da;
-                }
-                
-                .online { background: #3ba55d; }
-                .idle { background: #faa81a; }
-                .dnd { background: #ed4245; }
-                .offline { background: #747f8d; }
-                
-                .badge {
-                    padding: 5px 12px;
-                    border-radius: 20px;
-                    font-size: 0.85rem;
-                    font-weight: bold;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 5px;
-                }
-                
-                .badge-staff {
-                    background: linear-gradient(45deg, #5865f2, #4752c4);
-                    color: white;
-                }
-                
-                .badge-partner {
-                    background: linear-gradient(45deg, #ff73fa, #ffc0ff);
-                    color: black;
-                }
-                
-                .badge-booster {
-                    background: linear-gradient(45deg, #ff73fa, #ffc0ff);
-                    color: black;
-                }
-                
-                .badge-bug-hunter {
-                    background: linear-gradient(45deg, #ffd700, #ffed4e);
-                    color: black;
-                }
-            </style>
-        `);
-    </script>
+        // الحصول على معرف المستخدم من URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
 
-    <script>
-        // استيراد الدوال من script.js
-        const scriptModule = {};
-        
-        // تعريف دالة toggleTheme
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            
-            const themeIcon = document.getElementById('themeIcon');
-            if (themeIcon) {
-                themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        // رابط API الخاص بك
+        const API_URL = 'http://localhost:3000/api';
+
+        // تحميل البيانات
+        async function loadProfile() {
+            if (!userId) {
+                showError('الرجاء تحديد معرف المستخدم في الرابط (?id=USER_ID)');
+                return;
             }
-        }
-        
-        // تهيئة اللغة
-        document.addEventListener('DOMContentLoaded', function() {
-            // إخفاء شاشة التحميل
-            setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
-            }, 1000);
-            
-            // تحميل الثيم
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.body.setAttribute('data-theme', savedTheme);
-            
-            const themeIcon = document.getElementById('themeIcon');
-            if (themeIcon) {
-                themeIcon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-            }
-            
-            // تهيئة اللغة
-            initLanguage();
-            
-            // تحميل بيانات المستخدم
-            loadUserProfile();
-        });
-        
-        // نظام اللغة
-        function initLanguage() {
-            const languageBtn = document.getElementById('languageBtn');
-            const currentLangSpan = document.getElementById('currentLang');
-            
-            let currentLang = localStorage.getItem('language') || 'ar';
-            currentLangSpan.textContent = currentLang.toUpperCase();
-            
-            languageBtn.addEventListener('click', () => {
-                currentLang = currentLang === 'ar' ? 'en' : 'ar';
-                currentLangSpan.textContent = currentLang.toUpperCase();
-                localStorage.setItem('language', currentLang);
-                updateProfileLanguage(currentLang);
-            });
-        }
-        
-        function updateProfileLanguage(lang) {
-            // تحديث النصوص حسب اللغة
-            const translations = {
-                ar: {
-                    back: 'العودة للرئيسية',
-                    points: 'النقاط',
-                    level: 'المستوى',
-                    messages: 'الرسائل',
-                    rank: 'الترتيب',
-                    accountInfo: 'معلومات الحساب',
-                    userId: 'معرف المستخدم',
-                    createdDate: 'تاريخ الإنشاء',
-                    joinDate: 'تاريخ الانضمام',
-                    email: 'البريد الإلكتروني',
-                    roles: 'الرتب',
-                    permissions: 'الصلاحيات',
-                    recentActivity: 'النشاط الأخير',
-                    message: 'رسالة',
-                    minutesAgo: 'دقيقة',
-                    boostStatus: 'غير معزز',
-                    online: 'متصل',
-                    idle: 'خامل',
-                    dnd: 'مشغول',
-                    offline: 'غير متصل'
-                },
-                en: {
-                    back: 'Back to Home',
-                    points: 'Points',
-                    level: 'Level',
-                    messages: 'Messages',
-                    rank: 'Rank',
-                    accountInfo: 'Account Info',
-                    userId: 'User ID',
-                    createdDate: 'Created Date',
-                    joinDate: 'Join Date',
-                    email: 'Email',
-                    roles: 'Roles',
-                    permissions: 'Permissions',
-                    recentActivity: 'Recent Activity',
-                    message: 'Message',
-                    minutesAgo: 'minute ago',
-                    boostStatus: 'Not Boosted',
-                    online: 'Online',
-                    idle: 'Idle',
-                    dnd: 'Do Not Disturb',
-                    offline: 'Offline'
-                }
-            };
-            
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.getAttribute('data-translate');
-                if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-        }
-        
-        // تحميل بيانات الملف الشخصي
-        async function loadUserProfile() {
+
             try {
-                // التحقق من تسجيل الدخول
-                const savedUser = localStorage.getItem('discord_user');
-                const savedToken = localStorage.getItem('discord_token');
-                
-                if (!savedUser || !savedToken) {
-                    showNotification('يرجى تسجيل الدخول أولاً', 'error');
-                    setTimeout(() => window.location.href = 'index.html', 2000);
+                const response = await fetch(`${API_URL}/member/${userId}`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    showError(result.error || 'فشل في تحميل البيانات');
                     return;
                 }
-                
-                const user = JSON.parse(savedUser);
-                const token = savedToken;
-                
-                // عرض البيانات الأساسية
-                displayUserData(user);
-                
-                // جلب البيانات الإضافية من API البوت
-                await fetchExtendedUserData(user.id, token);
-                
+
+                displayProfile(result.data);
             } catch (error) {
-                console.error('Error loading profile:', error);
-                showNotification('خطأ في تحميل البيانات', 'error');
+                console.error('خطأ:', error);
+                showError('فشل في الاتصال بالخادم. تأكد من تشغيل البوت والخادم.');
             }
         }
-        
-        function displayUserData(user) {
-            // الصورة الشخصية
-            document.getElementById('profileAvatar').src = user.avatarUrl;
-            document.getElementById('profileAvatar').alt = user.globalName || user.username;
-            
-            // الاسم
-            document.getElementById('profileUsername').textContent = user.globalName || user.username;
-            document.getElementById('profileTag').textContent = `@${user.username}#${user.discriminator}`;
-            
-            // المعرف
-            document.getElementById('userId').textContent = user.id;
-            
-            // البريد الإلكتروني
-            document.getElementById('userEmail').textContent = user.email || 'غير متاح';
-            
-            // حالة الاتصال (محاكاة)
+
+        // عرض البروفايل
+        function displayProfile(data) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('profileContent').style.display = 'block';
+
+            // المعلومات الأساسية
+            document.getElementById('profileAvatar').src = data.avatar;
+            document.getElementById('profileUsername').textContent = data.username;
+            document.getElementById('profileTag').textContent = `@${data.username}`;
+            document.getElementById('userId').textContent = data.id;
+            document.getElementById('displayName').textContent = data.displayName;
+            document.getElementById('isBot').textContent = data.bot ? 'نعم' : 'لا';
+
+            // الحالة
             const statusIndicator = document.getElementById('statusIndicator');
-            const statuses = ['online', 'idle', 'dnd', 'offline'];
-            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-            statusIndicator.className = `status-indicator ${randomStatus}`;
-            statusIndicator.title = getStatusText(randomStatus);
-        }
-        
-        async function fetchExtendedUserData(userId, token) {
-            try {
-                console.log('🔄 جلب البيانات من API البوت...');
-                
-                // استدعاء API البوت الحقيقي - غيّر هذا العنوان لعنوان سيرفرك
-                const API_URL = 'https://elitestudio11.github.io/elitestudio/'; // أو استخدم Railway/Render/Heroku URL
-                
-                const response = await fetch(`${API_URL}/api/member/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (!result.success) {
-                    throw new Error(result.error || 'فشل في جلب البيانات');
-                }
-                
-                console.log('✅ تم جلب البيانات بنجاح:', result);
-                
-                // تحويل البيانات
-                const formattedData = {
-                    points: result.member.points || 0,
-                    level: result.member.level || 1,
-                    messages: Math.floor((result.member.points || 0) / 10),
-                    rank: result.member.rank || 0,
-                    accountCreated: result.user.createdDate,
-                    serverJoined: result.member.joinedDate,
-                    roles: result.roles.list.map(role => ({
-                        name: role.name,
-                        color: role.color || '#99aab5',
-                        icon: getRoleIcon(role.name)
-                    })),
-                    permissions: result.member.permissions.map(perm => getPermissionArabic(perm)),
-                    recentActivity: [],
-                    badges: result.badges || []
-                };
-                
-                displayExtendedData(formattedData);
-                
-            } catch (error) {
-                console.error('❌ خطأ في جلب البيانات:', error);
-                showNotification(`خطأ: ${error.message}`, 'error');
-                displayExtendedData(getDefaultData());
-            }
-        }
-        
-        function getRoleIcon(roleName) {
-            const icons = {
-                'admin': 'fa-user-shield',
-                'mod': 'fa-shield-alt',
-                'owner': 'fa-crown',
-                'vip': 'fa-star'
-            };
-            roleName = roleName.toLowerCase();
-            for (const [key, icon] of Object.entries(icons)) {
-                if (roleName.includes(key)) return icon;
-            }
-            return 'fa-user-circle';
-        }
-        
-        function getPermissionArabic(permission) {
-            const perms = {
-                'Administrator': 'مدير',
-                'ManageGuild': 'إدارة السيرفر',
-                'ManageRoles': 'إدارة الرتب',
-                'ManageChannels': 'إدارة القنوات',
-                'KickMembers': 'طرد الأعضاء',
-                'BanMembers': 'حظر الأعضاء'
-            };
-            return perms[permission] || permission;
-        }
-        
-        function displayExtendedData(data) {
-            // النقاط والمستوى
-            document.getElementById('pointsStat').textContent = data.points;
-            document.getElementById('levelStat').textContent = data.level;
-            document.getElementById('messagesStat').textContent = data.messages;
-            document.getElementById('rankStat').textContent = `#${data.rank}`;
+            statusIndicator.className = `status-indicator status-${data.status}`;
             
-            // التواريخ
-            document.getElementById('accountCreated').textContent = formatDate(data.accountCreated);
-            document.getElementById('serverJoined').textContent = formatDate(data.serverJoined);
-            
-            // الرتب
-            const rolesContainer = document.getElementById('rolesContainer');
-            rolesContainer.innerHTML = '';
-            data.roles.forEach(role => {
-                const roleElement = document.createElement('div');
-                roleElement.className = 'role-pill';
-                roleElement.style.cssText = `
-                    padding: 8px 16px;
-                    background: ${hexToRgba(role.color, 0.2)};
-                    border: 1px solid ${role.color};
-                    border-radius: 20px;
-                    color: ${role.color};
-                    font-size: 0.9rem;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                `;
-                roleElement.innerHTML = `<i class="fas ${role.icon}"></i> ${role.name}`;
-                rolesContainer.appendChild(roleElement);
-            });
-            document.getElementById('rolesCount').textContent = data.roles.length;
-            
-            // الصلاحيات
-            const permissionsGrid = document.getElementById('permissionsGrid');
-            permissionsGrid.innerHTML = '';
-            data.permissions.forEach(permission => {
-                const permElement = document.createElement('div');
-                permElement.className = 'permission-item';
-                permElement.innerHTML = `
-                    <i class="fas fa-check-circle permission-icon"></i>
-                    <span>${permission}</span>
-                `;
-                permissionsGrid.appendChild(permElement);
-            });
-            
-            // النشاط
-            const activityList = document.getElementById('activityList');
-            activityList.innerHTML = '';
-            data.recentActivity.forEach(activity => {
-                const activityElement = document.createElement('div');
-                activityElement.className = 'activity-item';
-                activityElement.style.cssText = `
-                    padding: 10px;
-                    background: rgba(255, 255, 255, 0.05);
-                    border-radius: 8px;
-                    margin-bottom: 10px;
-                `;
-                
-                const icon = activity.type === 'message' ? 'fa-comment' : 
-                            activity.type === 'voice' ? 'fa-microphone' : 
-                            activity.type === 'reaction' ? 'fa-heart' : 'fa-bell';
-                
-                activityElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                        <span style="color: white; font-size: 0.9rem;">
-                            <i class="fas ${icon}"></i> ${getActivityType(activity.type)}
-                        </span>
-                        <span style="color: #b8b8b8; font-size: 0.8rem;">منذ ${activity.time} دقيقة</span>
-                    </div>
-                    <div style="color: #b8b8b8; font-size: 0.9rem;">${activity.description}</div>
-                `;
-                activityList.appendChild(activityElement);
-            });
-            
-            // الباجات
-            const badgesContainer = document.getElementById('badgesContainer');
-            badgesContainer.innerHTML = '';
-            data.badges.forEach(badge => {
-                const badgeElement = document.createElement('div');
-                badgeElement.className = `badge badge-${badge.type}`;
-                badgeElement.innerHTML = `<i class="fas fa-${badge.type === 'staff' ? 'user-shield' : badge.type === 'booster' ? 'gem' : 'bug'}"></i> ${badge.name}`;
-                badgesContainer.appendChild(badgeElement);
-            });
-        }
-        
-        // وظائف مساعدة
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ar-SA');
-        }
-        
-        function hexToRgba(hex, alpha) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        }
-        
-        function getActivityType(type) {
-            const types = {
-                'message': 'رسالة',
-                'voice': 'صوتي',
-                'reaction': 'تفاعل',
-                'join': 'انضمام'
-            };
-            return types[type] || type;
-        }
-        
-        function getStatusText(status) {
-            const statuses = {
+            const statusText = {
                 'online': 'متصل',
                 'idle': 'خامل',
                 'dnd': 'مشغول',
                 'offline': 'غير متصل'
             };
-            return statuses[status] || status;
-        }
-        
-        function getDefaultData() {
-            return {
-                points: 0,
-                level: 1,
-                messages: 0,
-                rank: 0,
-                accountCreated: new Date().toISOString(),
-                serverJoined: new Date().toISOString(),
-                roles: [],
-                permissions: [],
-                recentActivity: [],
-                badges: []
-            };
-        }
-        
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'error' ? '#ef4444' : '#10b981'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                z-index: 10000;
-                animation: slideIn 0.3s ease;
-                max-width: 300px;
-            `;
-            notification.textContent = message;
+            document.getElementById('statusText').textContent = statusText[data.status] || 'غير معروف';
+
+            // تاريخ الانضمام
+            if (data.joinedAt) {
+                const joinDate = new Date(data.joinedAt);
+                document.getElementById('serverJoined').textContent = joinDate.toLocaleDateString('ar-SA');
+            }
+
+            // الباجات
+            const badgesContainer = document.getElementById('badgesContainer');
+            badgesContainer.innerHTML = '';
             
-            document.body.appendChild(notification);
+            if (data.isOwner) {
+                const badge = document.createElement('div');
+                badge.className = 'badge badge-owner';
+                badge.innerHTML = '<i class="fas fa-crown"></i> مالك السيرفر';
+                badgesContainer.appendChild(badge);
+            }
             
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            if (data.premiumSince) {
+                const badge = document.createElement('div');
+                badge.className = 'badge badge-booster';
+                badge.innerHTML = '<i class="fas fa-gem"></i> معزز';
+                badgesContainer.appendChild(badge);
+            }
+
+            // الرتب
+            const rolesContainer = document.getElementById('rolesContainer');
+            rolesContainer.innerHTML = '';
             
-            // إضافة animation إن لم تكن موجودة
-            if (!document.querySelector('#notification-animation')) {
-                const style = document.createElement('style');
-                style.id = 'notification-animation';
-                style.textContent = `
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
+            if (data.roles && data.roles.length > 0) {
+                data.roles.forEach(role => {
+                    const roleElement = document.createElement('div');
+                    roleElement.className = 'role-pill';
+                    roleElement.style.cssText = `
+                        background: ${hexToRgba(role.color, 0.2)};
+                        border: 1px solid ${role.color};
+                        color: ${role.color || '#fff'};
+                    `;
+                    roleElement.innerHTML = `<i class="fas fa-circle"></i> ${role.name}`;
+                    rolesContainer.appendChild(roleElement);
+                });
+                document.getElementById('rolesCount').textContent = data.roles.length;
+            } else {
+                rolesContainer.innerHTML = '<p style="color: #b8b8b8;">لا توجد رتب</p>';
+            }
+
+            // الصلاحيات
+            const permissionsGrid = document.getElementById('permissionsGrid');
+            permissionsGrid.innerHTML = '';
+            
+            if (data.permissions && data.permissions.length > 0) {
+                // ترجمة الصلاحيات المهمة
+                const permissionNames = {
+                    'Administrator': 'مدير',
+                    'ManageGuild': 'إدارة السيرفر',
+                    'ManageRoles': 'إدارة الرتب',
+                    'ManageChannels': 'إدارة القنوات',
+                    'KickMembers': 'طرد الأعضاء',
+                    'BanMembers': 'حظر الأعضاء',
+                    'ManageMessages': 'إدارة الرسائل',
+                    'ManageNicknames': 'إدارة الألقاب',
+                    'ManageEmojisAndStickers': 'إدارة الإيموجي والملصقات',
+                    'ViewAuditLog': 'عرض سجل التدقيق',
+                    'ModerateMembers': 'إدارة الأعضاء'
+                };
+
+                const importantPermissions = data.permissions.filter(perm => 
+                    permissionNames[perm]
+                );
+
+                if (importantPermissions.length > 0) {
+                    importantPermissions.forEach(permission => {
+                        const permElement = document.createElement('div');
+                        permElement.className = 'permission-item';
+                        permElement.innerHTML = `
+                            <i class="fas fa-check-circle permission-icon"></i>
+                            <span>${permissionNames[permission]}</span>
+                        `;
+                        permissionsGrid.appendChild(permElement);
+                    });
+                } else {
+                    permissionsGrid.innerHTML = '<p style="color: #b8b8b8;">صلاحيات عادية</p>';
+                }
+
+                document.getElementById('permissionsCount').textContent = importantPermissions.length;
+            } else {
+                permissionsGrid.innerHTML = '<p style="color: #b8b8b8;">لا توجد صلاحيات خاصة</p>';
             }
         }
+
+        // عرض الخطأ
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorDiv = document.getElementById('error');
+            errorDiv.style.display = 'block';
+            errorDiv.className = 'error';
+            errorDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>${message}</p>
+            `;
+        }
+
+        // تحويل Hex إلى RGBA
+        function hexToRgba(hex, alpha) {
+            if (!hex || hex === '#000000') return `rgba(255, 255, 255, ${alpha})`;
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        loadProfile();
     </script>
 </body>
 </html>
