@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معرض الأعمال | Elite Studio</title>
+    <meta name="description" content="معرض أعمال Elite Studio - تصاميم Discord، بوتات، مواقع وتصاميم جرافيك">
+    <meta name="keywords" content="معرض أعمال, تصاميم ديسكورد, بوتات, مواقع, تصاميم جرافيك">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Floating Elements -->
+    <div class="floating-element el-1"></div>
+    <div class="floating-element el-2"></div>
+    <div class="floating-element el-3"></div>
+    <div class="floating-element el-4"></div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-text">Elite Studio</div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Header -->
+  <header class="header" id="header">
+    <div class="container">
+        <nav class="nav">
+            <div class="brand">
+                <img src="img/logo.png" alt="Elite Studio Logo" class="brand-logo">
+                <span class="brand-name">
+                    Elite <span class="brand-highlight">Studio</span>
+                </span>
+            </div>
+
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span class="menu-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html" class="nav-link">
+                        
+                        <span class="nav-text" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                    </a>
+                    <a href="store.html" class="nav-link">
+                      
+                        <span class="nav-text" data-ar="المتجر" data-en="Store">المتجر</span>
+                    </a>
+                    <a href="m.html" class="nav-link active">
+                     
+                        <span class="nav-text" data-ar="معرض الأعمال" data-en="Gallery">معرض الأعمال</span>
+                    </a>
+                        <a href="rules.html" class="nav-link ">
+                     
+                        <span class="nav-text" data-ar="القوانين " data-en="Rules">القوانين </span>
+                    </a>
+                    
+                    <div class="nav-actions">
+                        <!-- Discord Auth Button -->
+                        <div class="discord-auth" id="discordAuth">
+                            <!-- Not Connected State -->
+                            <button class="discord-btn" id="discordConnectBtn" onclick="connectDiscord()">
+                                <i class="fab fa-discord"></i>
+                                <span data-ar="ربط Discord" data-en="Connect Discord">ربط Discord</span>
+                            </button>
+                            
+                            <!-- Connected State -->
+                            <div class="discord-profile" id="discordProfile" style="display: none;">
+                                <div class="profile-avatar" id="profileAvatar">
+                                    <img id="userAvatar" src="" alt="Avatar">
+                                </div>
+                                <div class="profile-info">
+                                    <span class="profile-name" id="userName">Loading...</span>
+                                    <span class="profile-id" id="userId">#0000</span>
+                                </div>
+                                <div class="profile-dropdown">
+                                    <button class="profile-menu-btn" onclick="toggleProfileMenu()">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="profile-menu" id="profileMenu">
+                                        <a href="#" onclick="showProfileModal()">
+                                            <i class="fas fa-user"></i>
+                                            <span data-ar="الملف الشخصي" data-en="Profile">الملف الشخصي</span>
+                                        </a>
+                                        <a href="profile.html">
+                                            <i class="fas fa-user"></i>
+                                            <span data-ar="معلومات الحساب" data-en="Account Info">معلومات الحساب</span>
+                                        </a>
+                                        <a href="#" onclick="disconnectDiscord()">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            <span data-ar="تسجيل الخروج" data-en="Logout">تسجيل الخروج</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-toggle">
+                            <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+                                <i class="fas fa-sun" id="themeIcon"></i>
+                            </button>
+                        </div>
+
+                        <div class="language-switcher">
+                            <button class="language-btn" id="languageBtn">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLang">AR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Discord Profile Modal -->
+    <div class="modal" id="discordProfileModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-header">
+                <i class="fab fa-discord modal-icon"></i>
+                <h2 data-ar="ملف Discord الشخصي" data-en="Discord Profile">ملف Discord الشخصي</h2>
+            </div>
+
+            <div class="discord-profile-content" id="discordProfileContent">
+                <div class="profile-card">
+                    <div class="profile-banner" id="profileBanner">
+                        <div class="profile-avatar-large">
+                            <img id="modalUserAvatar" src="" alt="Avatar">
+                            <div class="status-indicator" id="userStatus"></div>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h3 id="modalUserName">Loading...</h3>
+                        <p class="username" id="modalUsername">@username</p>
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="label" data-ar="معرف المستخدم:" data-en="User ID:">معرف المستخدم:</span>
+                                <span class="value" id="modalUserId">000000000000000000</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label" data-ar="تاريخ الانضمام:" data-en="Joined Discord:">تاريخ الانضمام:</span>
+                                <span class="value" id="userJoinDate">Unknown</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label" data-ar="تاريخ الربط:" data-en="Connected:">تاريخ الربط:</span>
+                                <span class="value" id="connectionDate">Just now</span>
+                            </div>
+                        </div>
+                        <div class="user-badges" id="userBadges">
+                            <!-- Badges will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="galleryHero">
+        <div class="container">
+            <div class="hero-content">
+                <!-- Badges -->
+                <div class="badges">
+                    <span class="badge badge-gradient">
+                        <i class="fas fa-paint-brush"></i>
+                        <span data-ar="أعمال حصرية" data-en="Exclusive Works">أعمال حصرية</span>
+                    </span>
+                    <span class="badge badge-outline">
+                        <i class="fas fa-star"></i>
+                        <span data-ar="أكثر من 15 تصميم" data-en="15+ Designs">أكثر من 15 تصميم</span>
+                    </span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="hero-title">
+                    <span class="title-line" data-ar="معرض" data-en="Gallery">معرض</span>
+                    <span class="title-line"><span class="text-gradient" data-ar="أعمالنا" data-en="Our Works">أعمالنا</span> <span data-ar="تصاميم إبداعية تلهمك" data-en="Creative Designs That Inspire">تصاميم إبداعية تلهمك</span></span>
+                </h1>
+
+                <!-- Description -->
+                <p class="hero-description" data-ar="استكشف مجموعة من أفضل أعمالنا في تصميم سيرفرات Discord، بوتات، مواقع إلكترونية، وتصاميم جرافيك. كل تصميم يمثل قصة نجاح مع أحد عملائنا الراضين." data-en="Explore our collection of best works in Discord servers design, bots, websites, and graphic designs. Each design represents a success story with one of our satisfied clients.">
+                    استكشف مجموعة من أفضل أعمالنا في تصميم سيرفرات Discord، بوتات، مواقع إلكترونية، وتصاميم جرافيك.
+                    كل تصميم يمثل قصة نجاح مع أحد عملائنا الراضين.
+                </p>
+
+                <!-- Filter Tabs -->
+                <div class="filter-tabs" id="filterTabs">
+                    <button class="filter-tab active" data-filter="all">
+                        <i class="fas fa-th-large"></i>
+                        <span data-ar="الكل" data-en="All">الكل</span>
+                    </button>
+                    <button class="filter-tab" data-filter="discord">
+                        <i class="fab fa-discord"></i>
+                        <span data-ar="تصاميم Discord" data-en="Discord Designs">تصاميم Discord</span>
+                    </button>
+                    <button class="filter-tab" data-filter="bots">
+                        <i class="fas fa-robot"></i>
+                        <span data-ar="بوتات Discord" data-en="Discord Bots">بوتات Discord</span>
+                    </button>
+                    <button class="filter-tab" data-filter="websites">
+                        <i class="fas fa-code"></i>
+                        <span data-ar="مواقع إلكترونية" data-en="Websites">مواقع إلكترونية</span>
+                    </button>
+                    <button class="filter-tab" data-filter="graphic">
+                        <i class="fas fa-palette"></i>
+                        <span data-ar="تصاميم جرافيك" data-en="Graphic Designs">تصاميم جرافيك</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <!-- Discord Designs -->
+            <div class="gallery-category" id="discord-category">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fab fa-discord"></i>
+                        <span data-ar="تصاميم سيرفرات Discord" data-en="Discord Server Designs">تصاميم سيرفرات Discord</span>
+                    </h2>
+                    <p class="category-description" data-ar="تصاميم احترافية كاملة لسيرفرات Discord تشمل جميع القنوات، الأدوار، الإيموجيات، والبانرات" data-en="Professional complete designs for Discord servers including all channels, roles, emojis, and banners">
+                        تصاميم احترافية كاملة لسيرفرات Discord تشمل جميع القنوات، الأدوار، الإيموجيات، والبانرات
+                    </p>
+                </div>
+                
+                <div class="gallery-grid">
+                    <!-- Discord Design 1 -->
+                    <div class="gallery-item" data-category="discord">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1424345042902057040/1456267676975628349/xxxxxx.png?ex=6957be76&is=69566cf6&hm=d74c7d112d6c2e0bc7fb0ec5dd138dc6a6018ee81b5c8f6fd91e5af5e783f8b5&=&format=webp&quality=lossless&width=613&height=613" alt="تصميم Discord احترافي">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="تصميم Discord متكامل" data-en="Complete Discord Design">تصميم Discord متكامل</h3>
+                                    <p data-ar="تصميم متكامل لسيرفر مع واجهات تفاعلية" data-en="Complete server design with interactive interfaces">تصميم متكامل لسيرفر مع واجهات تفاعلية</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#ديسكورد" data-en="#Discord">#ديسكورد</span>
+                                        <span class="tag" data-ar="#تصميم" data-en="#Design">#تصميم</span>
+                                        <span class="tag" data-ar="#تصميم_متكامل" data-en="#Complete_Design">#تصميم_متكامل</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span data-ar="تم التسليم: نوفمبر 2026" data-en="Delivered: Nov 2026">تم التسليم: نوفمبر 2026</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span data-ar="مدة العمل: 5 أيام" data-en="Work Duration: 5 days">مدة العمل: 5 أيام</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Discord Design 2 -->
+                    <div class="gallery-item" data-category="discord">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1424345042902057040/1434265022900605188/e03e05ebf60f8228.png?ex=69581e64&is=6956cce4&hm=a6e72a3566f08028a849cc40294d6e355c3151e729414f0680274a6aead74c68&=&format=webp&quality=lossless" alt="سيرفر تعليمي">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="سيرفر تعليمي" data-en="Educational Server">سيرفر تعليمي</h3>
+                                    <p data-ar="تصميم سيرفر للتعليم مع نظام تذاكر ودعم تقني" data-en="Educational server design with ticket system and technical support">تصميم سيرفر للتعليم مع نظام تذاكر ودعم تقني</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#تعليم" data-en="#Education">#تعليم</span>
+                                        <span class="tag" data-ar="#دعم_فني" data-en="#Technical_Support">#دعم_فني</span>
+                                        <span class="tag" data-ar="#تذاكر" data-en="#Tickets">#تذاكر</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span data-ar="تم التسليم: يناير 2025" data-en="Delivered: Jan 2025">تم التسليم: يناير 2025</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span data-ar="مدة العمل: 7 أيام" data-en="Work Duration: 7 days">مدة العمل: 7 أيام</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Discord Design 3 -->
+                    <div class="gallery-item" data-category="discord">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1424345042902057040/1434264790590689361/24f5427da69aed07.png?ex=69581e2d&is=6956ccad&hm=7898f879e5f1d64f529524d87470ef05f6646ac799332087d3584d178e6c02be&=&format=webp&quality=lossless&width=905&height=509" alt="سيرفر مجتمعي">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="سيرفر مجتمعي" data-en="Community Server">سيرفر مجتمعي</h3>
+                                    <p data-ar="تصميم سيرفر لمجتمع تفاعلي مع أنظمة رتب متقدمة" data-en="Community server design with advanced ranking systems">تصميم سيرفر لمجتمع تفاعلي مع أنظمة رتب متقدمة</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#مجتمع" data-en="#Community">#مجتمع</span>
+                                        <span class="tag" data-ar="#رتب" data-en="#Roles">#رتب</span>
+                                        <span class="tag" data-ar="#تفاعلي" data-en="#Interactive">#تفاعلي</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span data-ar="تم التسليم: ديسمبر 2024" data-en="Delivered: Dec 2024">تم التسليم: ديسمبر 2024</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span data-ar="مدة العمل: 4 أيام" data-en="Work Duration: 4 days">مدة العمل: 4 أيام</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discord Bots -->
+            <div class="gallery-category" id="bots-category">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-robot"></i>
+                        <span data-ar="بوتات Discord" data-en="Discord Bots">بوتات Discord</span>
+                    </h2>
+                    <p class="category-description" data-ar="بوتات Discord مخصصة بأحدث التقنيات والمميزات المتقدمة" data-en="Custom Discord bots with latest technologies and advanced features">
+                        بوتات Discord مخصصة بأحدث التقنيات والمميزات المتقدمة
+                    </p>
+                </div>
+                
+                <div class="gallery-grid">
+                    <!-- Bot 1 -->
+                    <div class="gallery-item" data-category="bots">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1454895295816274126/1456314741499760810/HEADER.png?ex=6957ea4b&is=695698cb&hm=fc9c4c273a17a09e375f52693d1dbae7211ee86cc2c2daebe14bc3c4e40ff0f9&=&format=webp&quality=lossless" alt="بوت حماية">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="بوت حماية متقدم" data-en="Advanced Security Bot">بوت حماية متقدم</h3>
+                                    <p data-ar="بوت حماية جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل" data-en="New security bot with advanced structure and unprecedented systems">بوت حماية جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#حماية" data-en="#Security">#حماية</span>
+                                        <span class="tag" data-ar="#24/7" data-en="#24/7">#24/7</span>
+                                        <span class="tag" data-ar="#آمن" data-en="#Secure">#آمن</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>Node.js + Discord.js</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-database"></i>
+                                            <span data-ar="قاعدة بيانات محلية" data-en="Local Database">قاعدة بيانات محلية</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bot 2 -->
+                    <div class="gallery-item" data-category="bots">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1454895295816274126/1456314741499760810/HEADER.png?ex=6957ea4b&is=695698cb&hm=fc9c4c273a17a09e375f52693d1dbae7211ee86cc2c2daebe14bc3c4e40ff0f9&=&format=webp&quality=lossless" alt="بوت نظام">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="بوت نظام متقدم" data-en="Advanced System Bot">بوت نظام متقدم</h3>
+                                    <p data-ar="بوت نظام جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل" data-en="New system bot with advanced structure and unprecedented systems">بوت نظام جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#نظام" data-en="#System">#نظام</span>
+                                        <span class="tag" data-ar="#24/7" data-en="#24/7">#24/7</span>
+                                        <span class="tag" data-ar="#حديث" data-en="#Modern">#حديث</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>Node.js + Discord.js</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-database"></i>
+                                            <span data-ar="قاعدة بيانات محلية" data-en="Local Database">قاعدة بيانات محلية</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bot 3 -->
+                    <div class="gallery-item" data-category="bots">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1454895295816274126/1456314741499760810/HEADER.png?ex=6957ea4b&is=695698cb&hm=fc9c4c273a17a09e375f52693d1dbae7211ee86cc2c2daebe14bc3c4e40ff0f9&=&format=webp&quality=lossless" alt="بوت تذاكر">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="بوت تذاكر متقدم" data-en="Advanced Tickets Bot">بوت تذاكر متقدم</h3>
+                                    <p data-ar="بوت تذاكر جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل" data-en="New tickets bot with advanced structure and unprecedented systems">بوت تذاكر جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#تذاكر" data-en="#Tickets">#تذاكر</span>
+                                        <span class="tag" data-ar="#24/7" data-en="#24/7">#24/7</span>
+                                        <span class="tag" data-ar="#حديث" data-en="#Modern">#حديث</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>Node.js + Discord.js</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-database"></i>
+                                            <span data-ar="قاعدة بيانات محلية" data-en="Local Database">قاعدة بيانات محلية</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Websites -->
+            <div class="gallery-category" id="websites-category">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-code"></i>
+                        <span data-ar="مواقع إلكترونية" data-en="Websites">مواقع إلكترونية</span>
+                    </h2>
+                    <p class="category-description" data-ar="تصميم وتطوير مواقع إلكترونية متجاوبة مع أحدث التقنيات" data-en="Design and development of responsive websites with latest technologies">
+                        تصميم وتطوير مواقع إلكترونية متجاوبة مع أحدث التقنيات
+                    </p>
+                </div>
+                
+                <div class="gallery-grid">
+                    <!-- Website 1 -->
+                    <div class="gallery-item" data-category="websites">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1454895295816274126/1456314741499760810/HEADER.png?ex=6957ea4b&is=695698cb&hm=fc9c4c273a17a09e375f52693d1dbae7211ee86cc2c2daebe14bc3c4e40ff0f9&=&format=webp&quality=lossless" alt="موقع إلكتروني">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="قريباً" data-en="Coming Soon">قريباً</h3>
+                                    <p data-ar="مشروع جديد قيد التطوير" data-en="New project under development">مشروع جديد قيد التطوير</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#قريباً" data-en="#Coming_Soon">#قريباً</span>
+                                        <span class="tag" data-ar="#قيد_التطوير" data-en="#Under_Development">#قيد التطوير</span>
+                                        <span class="tag" data-ar="#مشروع_جديد" data-en="#New_Project">#مشروع جديد</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>HTML/CSS/JS + PHP</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span data-ar="تصميم مستجيب" data-en="Responsive Design">تصميم مستجيب</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Website 2 -->
+                    <div class="gallery-item" data-category="websites">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1454895295816274126/1456314741499760810/HEADER.png?ex=6957ea4b&is=695698cb&hm=fc9c4c273a17a09e375f52693d1dbae7211ee86cc2c2daebe14bc3c4e40ff0f9&=&format=webp&quality=lossless" alt="موقع إلكتروني">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="قريباً" data-en="Coming Soon">قريباً</h3>
+                                    <p data-ar="مشروع جديد قيد التطوير" data-en="New project under development">مشروع جديد قيد التطوير</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#قريباً" data-en="#Coming_Soon">#قريباً</span>
+                                        <span class="tag" data-ar="#قيد_التطوير" data-en="#Under_Development">#قيد التطوير</span>
+                                        <span class="tag" data-ar="#مشروع_جديد" data-en="#New_Project">#مشروع جديد</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>HTML/CSS/JS + PHP</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span data-ar="تصميم مستجيب" data-en="Responsive Design">تصميم مستجيب</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Website 3 -->
+                    <div class="gallery-item" data-category="websites">
+                        <div class="gallery-image">
+                            <img src="https://media.discordapp.net/attachments/1454895295816274126/1456314741499760810/HEADER.png?ex=6957ea4b&is=695698cb&hm=fc9c4c273a17a09e375f52693d1dbae7211ee86cc2c2daebe14bc3c4e40ff0f9&=&format=webp&quality=lossless" alt="موقع إلكتروني">
+                            <div class="gallery-overlay">
+                                <div class="overlay-content">
+                                    <h3 data-ar="قريباً" data-en="Coming Soon">قريباً</h3>
+                                    <p data-ar="مشروع جديد قيد التطوير" data-en="New project under development">مشروع جديد قيد التطوير</p>
+                                    <div class="project-tags">
+                                        <span class="tag" data-ar="#قريباً" data-en="#Coming_Soon">#قريباً</span>
+                                        <span class="tag" data-ar="#قيد_التطوير" data-en="#Under_Development">#قيد التطوير</span>
+                                        <span class="tag" data-ar="#مشروع_جديد" data-en="#New_Project">#مشروع جديد</span>
+                                    </div>
+                                    <div class="project-info">
+                                        <span class="info-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>HTML/CSS/JS + PHP</span>
+                                        </span>
+                                        <span class="info-item">
+                                            <i class="fas fa-mobile-alt"></i>
+                                            <span data-ar="تصميم مستجيب" data-en="Responsive Design">تصميم مستجيب</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-count="1">0</div>
+                        <div class="stat-label" data-ar="تصميم منجز" data-en="Completed Design">تصميم منجز</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-count="2">0</div>
+                        <div class="stat-label" data-ar="عميل راضي" data-en="Satisfied Client">عميل راضي</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-count="3">0</div>
+                        <div class="stat-label" data-ar="بوت مطور" data-en="Bot Developed">بوت مطور</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-count="0">0</div>
+                        <div class="stat-label" data-ar="موقع إلكتروني" data-en="Website">موقع إلكتروني</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  
+
+
+    <!-- CSS الخاص بالصفحة -->
+    <style>
+        /* Gallery Section Styles */
+        .gallery-section {
+            padding: 80px 0;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            background: var(--panel);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .gallery-category {
+            margin-bottom: 80px;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .category-description {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 40px rgba(107, 114, 153, 0.2);
+        }
+
+        .gallery-image {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover .gallery-image img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent 50%);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .overlay-content {
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .overlay-content {
+            transform: translateY(0);
+        }
+
+        .overlay-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .overlay-content p {
+            color: var(--muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text);
+        }
+
+        .project-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .info-item i {
+            color: var(--accent);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 60px 0;
+            background: var(--panel);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .cta-description {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                gap: 10px;
+            }
+
+            .filter-tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .category-title {
+                font-size: 1.8rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+
+    <script>
+        // نظام اللغات
+        const translations = {
+            ar: {
+                // Navigation
+                home: 'الرئيسية',
+                store: 'المتجر',
+                gallery: 'معرض الأعمال',
+                
+                // Hero Section
+                exclusiveWorks: 'أعمال حصرية',
+                designsCount: 'أكثر من 200 تصميم',
+                galleryTitle: 'معرض',
+                ourWorks: 'أعمالنا',
+                creativeDesigns: 'تصاميم إبداعية تلهمك',
+                heroDescription: 'استكشف مجموعة من أفضل أعمالنا في تصميم سيرفرات Discord، بوتات، مواقع إلكترونية، وتصاميم جرافيك. كل تصميم يمثل قصة نجاح مع أحد عملائنا الراضين.',
+                all: 'الكل',
+                discordDesigns: 'تصاميم Discord',
+                discordBots: 'بوتات Discord',
+                websites: 'مواقع إلكترونية',
+                graphicDesigns: 'تصاميم جرافيك',
+                
+                // Gallery Categories
+                discordServerDesigns: 'تصاميم سيرفرات Discord',
+                discordCategoryDesc: 'تصاميم احترافية كاملة لسيرفرات Discord تشمل جميع القنوات، الأدوار، الإيموجيات، والبانرات',
+                discordBotsTitle: 'بوتات Discord',
+                botsCategoryDesc: 'بوتات Discord مخصصة بأحدث التقنيات والمميزات المتقدمة',
+                websitesTitle: 'مواقع إلكترونية',
+                websitesCategoryDesc: 'تصميم وتطوير مواقع إلكترونية متجاوبة مع أحدث التقنيات',
+                
+                // Gallery Items
+                completeDiscordDesign: 'تصميم Discord متكامل',
+                completeServerDesign: 'تصميم متكامل لسيرفر مع واجهات تفاعلية',
+                educationalServer: 'سيرفر تعليمي',
+                educationalServerDesc: 'تصميم سيرفر للتعليم مع نظام تذاكر ودعم تقني',
+                communityServer: 'سيرفر مجتمعي',
+                communityServerDesc: 'تصميم سيرفر لمجتمع تفاعلي مع أنظمة رتب متقدمة',
+                advancedSecurityBot: 'بوت حماية متقدم',
+                securityBotDesc: 'بوت حماية جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل',
+                advancedSystemBot: 'بوت نظام متقدم',
+                systemBotDesc: 'بوت نظام جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل',
+                advancedTicketsBot: 'بوت تذاكر متقدم',
+                ticketsBotDesc: 'بوت تذاكر جديد بهيكلة متقدمة وأنظمة لم تقدم من قبل',
+                comingSoon: 'قريباً',
+                underDevelopment: 'مشروع جديد قيد التطوير',
+                
+                // Tags
+                discordTag: '#ديسكورد',
+                designTag: '#تصميم',
+                completeDesignTag: '#تصميم_متكامل',
+                educationTag: '#تعليم',
+                techSupportTag: '#دعم_فني',
+                ticketsTag: '#تذاكر',
+                communityTag: '#مجتمع',
+                rolesTag: '#رتب',
+                interactiveTag: '#تفاعلي',
+                securityTag: '#حماية',
+                secureTag: '#آمن',
+                systemTag: '#نظام',
+                modernTag: '#حديث',
+                comingSoonTag: '#قريباً',
+                underDevTag: '#قيد التطوير',
+                newProjectTag: '#مشروع_جديد',
+                
+                // Project Info
+                deliveredNov: 'تم التسليم: نوفمبر 2026',
+                deliveredJan: 'تم التسليم: يناير 2025',
+                deliveredDec: 'تم التسليم: ديسمبر 2024',
+                workDuration5: 'مدة العمل: 5 أيام',
+                workDuration7: 'مدة العمل: 7 أيام',
+                workDuration4: 'مدة العمل: 4 أيام',
+                localDatabase: 'قاعدة بيانات محلية',
+                responsiveDesign: 'تصميم مستجيب',
+                
+                // Stats
+                completedDesign: 'تصميم منجز',
+                satisfiedClient: 'عميل راضي',
+                botDeveloped: 'بوت مطور',
+                website: 'موقع إلكتروني',
+                
+                // CTA Section
+                ctaTitle: 'هل لديك فكرة لمشروعك القادم؟',
+                ctaDescription: 'دعنا نحول أفكارك إلى واقع ملموس. فريقنا من المصممين والمطورين جاهز لتنفيذ مشروعك بأعلى معايير الجودة.',
+                contactUsNow: 'اتصل بنا الآن',
+                browseServices: 'تصفح خدماتنا',
+                
+                // Discord Auth
+                connectDiscord: 'ربط Discord',
+                profile: 'الملف الشخصي',
+                accountInfo: 'معلومات الحساب',
+                logout: 'تسجيل الخروج',
+                
+                // Footer
+                quickLinks: 'روابط سريعة',
+                ourServices: 'خدماتنا',
+                contactUs: 'تواصل معنا',
+                discord: 'Discord',
+                email: 'البريد الإلكتروني',
+                allRightsReserved: 'جميع الحقوق محفوظة'
+            },
+            en: {
+                // Navigation
+                home: 'Home',
+                store: 'Store',
+                gallery: 'Gallery',
+                
+                // Hero Section
+                exclusiveWorks: 'Exclusive Works',
+                designsCount: '200+ Designs',
+                galleryTitle: 'Gallery',
+                ourWorks: 'Our Works',
+                creativeDesigns: 'Creative Designs That Inspire',
+                heroDescription: 'Explore our collection of best works in Discord servers design, bots, websites, and graphic designs. Each design represents a success story with one of our satisfied clients.',
+                all: 'All',
+                discordDesigns: 'Discord Designs',
+                discordBots: 'Discord Bots',
+                websites: 'Websites',
+                graphicDesigns: 'Graphic Designs',
+                
+                // Gallery Categories
+                discordServerDesigns: 'Discord Server Designs',
+                discordCategoryDesc: 'Professional complete designs for Discord servers including all channels, roles, emojis, and banners',
+                discordBotsTitle: 'Discord Bots',
+                botsCategoryDesc: 'Custom Discord bots with latest technologies and advanced features',
+                websitesTitle: 'Websites',
+                websitesCategoryDesc: 'Design and development of responsive websites with latest technologies',
+                
+                // Gallery Items
+                completeDiscordDesign: 'Complete Discord Design',
+                completeServerDesign: 'Complete server design with interactive interfaces',
+                educationalServer: 'Educational Server',
+                educationalServerDesc: 'Educational server design with ticket system and technical support',
+                communityServer: 'Community Server',
+                communityServerDesc: 'Community server design with advanced ranking systems',
+                advancedSecurityBot: 'Advanced Security Bot',
+                securityBotDesc: 'New security bot with advanced structure and unprecedented systems',
+                advancedSystemBot: 'Advanced System Bot',
+                systemBotDesc: 'New system bot with advanced structure and unprecedented systems',
+                advancedTicketsBot: 'Advanced Tickets Bot',
+                ticketsBotDesc: 'New tickets bot with advanced structure and unprecedented systems',
+                comingSoon: 'Coming Soon',
+                underDevelopment: 'New project under development',
+                
+                // Tags
+                discordTag: '#Discord',
+                designTag: '#Design',
+                completeDesignTag: '#Complete_Design',
+                educationTag: '#Education',
+                techSupportTag: '#Technical_Support',
+                ticketsTag: '#Tickets',
+                communityTag: '#Community',
+                rolesTag: '#Roles',
+                interactiveTag: '#Interactive',
+                securityTag: '#Security',
+                secureTag: '#Secure',
+                systemTag: '#System',
+                modernTag: '#Modern',
+                comingSoonTag: '#Coming_Soon',
+                underDevTag: '#Under_Development',
+                newProjectTag: '#New_Project',
+                
+                // Project Info
+                deliveredNov: 'Delivered: Nov 2026',
+                deliveredJan: 'Delivered: Jan 2025',
+                deliveredDec: 'Delivered: Dec 2024',
+                workDuration5: 'Work Duration: 5 days',
+                workDuration7: 'Work Duration: 7 days',
+                workDuration4: 'Work Duration: 4 days',
+                localDatabase: 'Local Database',
+                responsiveDesign: 'Responsive Design',
+                
+                // Stats
+                completedDesign: 'Completed Design',
+                satisfiedClient: 'Satisfied Client',
+                botDeveloped: 'Bot Developed',
+                website: 'Website',
+                
+                // CTA Section
+                ctaTitle: 'Do you have an idea for your next project?',
+                ctaDescription: "Let's turn your ideas into reality. Our team of designers and developers is ready to implement your project with the highest quality standards.",
+                contactUsNow: 'Contact Us Now',
+                browseServices: 'Browse Our Services',
+                
+                // Discord Auth
+                connectDiscord: 'Connect Discord',
+                profile: 'Profile',
+                accountInfo: 'Account Info',
+                logout: 'Logout',
+                
+                // Footer
+                quickLinks: 'Quick Links',
+                ourServices: 'Our Services',
+                contactUs: 'Contact Us',
+                discord: 'Discord',
+                email: 'Email',
+                allRightsReserved: 'All rights reserved'
+            }
+        };
+
+        let currentLang = 'ar';
+
+        // JavaScript for Gallery Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize loading screen
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1000);
+
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Gallery filtering
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+
+                    const filter = tab.getAttribute('data-filter');
+
+                    // Show/hide gallery items based on filter
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'scale(1)';
+                            }, 10);
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'scale(0.8)';
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+
+            // Animate stats counters
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            const animateCounter = (element) => {
+                const target = parseInt(element.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current);
+                    }
+                }, 16);
+            };
+
+            // Intersection Observer for counters
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statNumbers.forEach(stat => {
+                observer.observe(stat);
+            });
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const body = document.body;
+
+            // Check for saved theme or prefer-color-scheme
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    themeIcon.className = 'fas fa-moon';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    themeIcon.className = 'fas fa-sun';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Language switcher
+            const languageBtn = document.getElementById('languageBtn');
+            const currentLangSpan = document.getElementById('currentLang');
+            
+            languageBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'ar' ? 'en' : 'ar';
+                currentLangSpan.textContent = currentLang.toUpperCase();
+                updateLanguage(currentLang);
+            });
+
+            // Initialize Discord Auth
+            initDiscordAuth();
+        });
+
+        // Language update function
+        function updateLanguage(lang) {
+            // Update HTML direction
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Update all elements with data-ar and data-en attributes
+            document.querySelectorAll('[data-ar][data-en]').forEach(element => {
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    element.placeholder = element.getAttribute(`data-${lang}`);
+                } else {
+                    element.innerHTML = element.getAttribute(`data-${lang}`);
+                }
+            });
+            
+            // Update specific elements
+            updateNavigation(lang);
+            updateGalleryContent(lang);
+        }
+
+        function updateNavigation(lang) {
+            const navTexts = document.querySelectorAll('.nav-text');
+            if (navTexts.length >= 3) {
+                navTexts[0].textContent = translations[lang].home;
+                navTexts[1].textContent = translations[lang].store;
+                navTexts[2].textContent = translations[lang].gallery;
+            }
+        }
+
+        function updateGalleryContent(lang) {
+            // Update tags
+            document.querySelectorAll('.tag').forEach(tag => {
+                if (tag.textContent.includes('ديسكورد')) {
+                    tag.textContent = translations[lang].discordTag;
+                } else if (tag.textContent.includes('تصميم') && tag.textContent.includes('متكامل')) {
+                    tag.textContent = translations[lang].completeDesignTag;
+                } else if (tag.textContent.includes('تصميم')) {
+                    tag.textContent = translations[lang].designTag;
+                } else if (tag.textContent.includes('تعليم')) {
+                    tag.textContent = translations[lang].educationTag;
+                } else if (tag.textContent.includes('دعم_فني')) {
+                    tag.textContent = translations[lang].techSupportTag;
+                } else if (tag.textContent.includes('تذاكر')) {
+                    tag.textContent = translations[lang].ticketsTag;
+                } else if (tag.textContent.includes('مجتمع')) {
+                    tag.textContent = translations[lang].communityTag;
+                } else if (tag.textContent.includes('رتب')) {
+                    tag.textContent = translations[lang].rolesTag;
+                } else if (tag.textContent.includes('تفاعلي')) {
+                    tag.textContent = translations[lang].interactiveTag;
+                } else if (tag.textContent.includes('حماية')) {
+                    tag.textContent = translations[lang].securityTag;
+                } else if (tag.textContent.includes('آمن')) {
+                    tag.textContent = translations[lang].secureTag;
+                } else if (tag.textContent.includes('نظام')) {
+                    tag.textContent = translations[lang].systemTag;
+                } else if (tag.textContent.includes('حديث')) {
+                    tag.textContent = translations[lang].modernTag;
+                } else if (tag.textContent.includes('قريباً') || tag.textContent.includes('Coming_Soon')) {
+                    tag.textContent = translations[lang].comingSoonTag;
+                } else if (tag.textContent.includes('قيد_التطوير') || tag.textContent.includes('Under_Development')) {
+                    tag.textContent = translations[lang].underDevTag;
+                } else if (tag.textContent.includes('مشروع_جديد') || tag.textContent.includes('New_Project')) {
+                    tag.textContent = translations[lang].newProjectTag;
+                }
+            });
+        }
+
+        // Discord Authentication Functions
+        function initDiscordAuth() {
+            // Check if user is already connected
+            const savedUser = localStorage.getItem('discord_user');
+            const savedToken = localStorage.getItem('discord_token');
+            
+            if (savedUser && savedToken) {
+                try {
+                    const discordUser = JSON.parse(savedUser);
+                    showDiscordProfile(discordUser);
+                } catch (error) {
+                    console.error('Error parsing saved Discord user:', error);
+                    localStorage.removeItem('discord_user');
+                    localStorage.removeItem('discord_token');
+                }
+            }
+        }
+
+        function connectDiscord() {
+            // This function is defined in script.js - will redirect to OAuth
+            window.connectDiscord();
+        }
+
+        function disconnectDiscord() {
+            // This function is defined in script.js
+            window.disconnectDiscord();
+        }
+
+        function toggleProfileMenu() {
+            // This function is defined in script.js
+            window.toggleProfileMenu();
+        }
+
+        function showProfileModal() {
+            // This function is defined in script.js
+            window.showProfileModal();
+        }
+
+        function closeProfileModal() {
+            // This function is defined in script.js
+            window.closeProfileModal();
+        }
+
+        function toggleTheme() {
+            // This function is defined in script.js
+            window.toggleTheme();
+        }
+
+        function showDiscordProfile(user) {
+            const connectBtn = document.getElementById('discordConnectBtn');
+            const profile = document.getElementById('discordProfile');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userId = document.getElementById('userId');
+            
+            if (connectBtn) {
+                connectBtn.style.display = 'none';
+            }
+            
+            if (profile) {
+                profile.style.display = 'flex';
+                
+                if (userAvatar) {
+                    userAvatar.src = user.avatarUrl;
+                    userAvatar.alt = user.globalName || user.username;
+                    userAvatar.onerror = function() {
+                        this.src = `https://cdn.discordapp.com/embed/avatars/${(parseInt(user.discriminator) || 0) % 5}.png`;
+                    };
+                }
+                
+                if (userName) {
+                    userName.textContent = user.globalName || user.username;
+                }
+                
+                if (userId) {
+                    userId.textContent = `#${user.discriminator}`;
+                }
+            }
+            
+            // Update modal content if it exists
+            updateProfileModal(user);
+        }
+
+        function updateProfileModal(user) {
+            const modalUserAvatar = document.getElementById('modalUserAvatar');
+            const modalUserName = document.getElementById('modalUserName');
+            const modalUsername = document.getElementById('modalUsername');
+            const modalUserId = document.getElementById('modalUserId');
+            const connectionDate = document.getElementById('connectionDate');
+            
+            if (modalUserAvatar) {
+                modalUserAvatar.src = user.avatarUrl;
+                modalUserAvatar.alt = user.globalName || user.username;
+                modalUserAvatar.onerror = function() {
+                    this.src = `https://cdn.discordapp.com/embed/avatars/${(parseInt(user.discriminator) || 0) % 5}.png`;
+                };
+            }
+            
+            if (modalUserName) {
+                modalUserName.textContent = user.globalName || user.username;
+            }
+            
+            if (modalUsername) {
+                modalUsername.textContent = `@${user.username}`;
+            }
+            
+            if (modalUserId) {
+                modalUserId.textContent = user.id;
+            }
+            
+            if (connectionDate) {
+                const date = new Date(user.connectedAt);
+                connectionDate.textContent = date.toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US') + ' ' + date.toLocaleTimeString();
+            }
+        }
+
+        // Make functions globally accessible
+        window.connectDiscord = connectDiscord;
+        window.disconnectDiscord = disconnectDiscord;
+        window.toggleProfileMenu = toggleProfileMenu;
+        window.showProfileModal = showProfileModal;
+        window.closeProfileModal = closeProfileModal;
+        window.toggleTheme = toggleTheme;
+    </script>
+     <script src="protection.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>

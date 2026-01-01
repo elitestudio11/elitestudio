@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القوانين والعقوبات | Elite Studio</title>
+    <meta name="description" content="قوانين وشروط استخدام Elite Studio - قوانين Discord، استرجاع الأموال، الشراء والبيع، الطلبات، حقوق الملكية">
+    <meta name="keywords" content="قوانين، شروط استخدام، عقوبات، قوانين ديسكورد، استرجاع أموال">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Floating Elements -->
+    <div class="floating-element el-1"></div>
+    <div class="floating-element el-2"></div>
+    <div class="floating-element el-3"></div>
+    <div class="floating-element el-4"></div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-text">Elite Studio</div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="brand">
+                    <img src="img/logo.png" alt="Elite Studio Logo" class="brand-logo">
+                    <span class="brand-name">
+                        Elite <span class="brand-highlight">Studio</span>
+                    </span>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span class="menu-icon"></span>
+                </button>
+
+                <!-- Navigation Links -->
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html" class="nav-link">
+                        <span class="nav-text" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                    </a>
+                    <a href="store.html" class="nav-link">
+                        <span class="nav-text" data-ar="المتجر" data-en="Store">المتجر</span>
+                    </a>
+                    <a href="m.html" class="nav-link">
+                        <span class="nav-text" data-ar="معرض الأعمال" data-en="Gallery">معرض الأعمال</span>
+                    </a>
+                    <a href="rules.html" class="nav-link active">
+                        <span class="nav-text" data-ar="القوانين" data-en="Rules">القوانين</span>
+                    </a>
+                    
+                    <div class="nav-actions">
+                        <!-- Discord Auth Button -->
+                        <div class="discord-auth" id="discordAuth">
+                            <!-- Not Connected State -->
+                            <button class="discord-btn" id="discordConnectBtn" onclick="connectDiscord()">
+                                <i class="fab fa-discord"></i>
+                                <span data-ar="ربط Discord" data-en="Connect Discord">ربط Discord</span>
+                            </button>
+                            
+                            <!-- Connected State -->
+                            <div class="discord-profile" id="discordProfile" style="display: none;">
+                                <div class="profile-avatar" id="profileAvatar">
+                                    <img id="userAvatar" src="" alt="Avatar">
+                                </div>
+                                <div class="profile-info">
+                                    <span class="profile-name" id="userName">Loading...</span>
+                                    <span class="profile-id" id="userId">#0000</span>
+                                </div>
+                                <div class="profile-dropdown">
+                                    <button class="profile-menu-btn" onclick="toggleProfileMenu()">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="profile-menu" id="profileMenu">
+                                        <a href="#" onclick="showProfileModal()">
+                                            <i class="fas fa-user"></i>
+                                            <span data-ar="الملف الشخصي" data-en="Profile">الملف الشخصي</span>
+                                        </a>
+                                        <a href="profile.html">
+                                            <i class="fas fa-user"></i>
+                                            <span data-ar="معلومات الحساب" data-en="Account Info">معلومات الحساب</span>
+                                        </a>
+                                        <a href="#" onclick="disconnectDiscord()">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            <span data-ar="تسجيل الخروج" data-en="Logout">تسجيل الخروج</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="theme-toggle">
+                            <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+                                <i class="fas fa-sun" id="themeIcon"></i>
+                            </button>
+                        </div>
+
+                        <div class="language-switcher">
+                            <button class="language-btn" id="languageBtn">
+                                <i class="fas fa-globe"></i>
+                                <span id="currentLang">AR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Discord Profile Modal -->
+    <div class="modal" id="discordProfileModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-header">
+                <i class="fab fa-discord modal-icon"></i>
+                <h2 data-ar="ملف Discord الشخصي" data-en="Discord Profile">ملف Discord الشخصي</h2>
+            </div>
+
+            <div class="discord-profile-content" id="discordProfileContent">
+                <div class="profile-card">
+                    <div class="profile-banner" id="profileBanner">
+                        <div class="profile-avatar-large">
+                            <img id="modalUserAvatar" src="" alt="Avatar">
+                            <div class="status-indicator" id="userStatus"></div>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h3 id="modalUserName">Loading...</h3>
+                        <p class="username" id="modalUsername">@username</p>
+                        <div class="user-info">
+                            <div class="info-item">
+                                <span class="label" data-ar="معرف المستخدم:" data-en="User ID:">معرف المستخدم:</span>
+                                <span class="value" id="modalUserId">000000000000000000</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label" data-ar="تاريخ الانضمام:" data-en="Joined Discord:">تاريخ الانضمام:</span>
+                                <span class="value" id="userJoinDate">Unknown</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label" data-ar="تاريخ الربط:" data-en="Connected:">تاريخ الربط:</span>
+                                <span class="value" id="connectionDate">Just now</span>
+                            </div>
+                        </div>
+                        <div class="user-badges" id="userBadges">
+                            <!-- Badges will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section for Rules -->
+    <section class="hero-section" id="rulesHero">
+        <div class="container">
+            <div class="hero-content">
+                <!-- Badges -->
+                <div class="badges">
+                    <span class="badge badge-gradient">
+                        <i class="fas fa-gavel"></i>
+                        <span data-ar="قوانين إلزامية" data-en="Mandatory Rules">قوانين إلزامية</span>
+                    </span>
+                    <span class="badge badge-outline">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span data-ar="عقوبات صارمة" data-en="Strict Penalties">عقوبات صارمة</span>
+                    </span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="hero-title">
+                    <span class="title-line" data-ar="قوانين وشروط" data-en="Rules & Terms">قوانين وشروط</span>
+                    <span class="title-line"><span class="text-gradient" data-ar="الاستخدام" data-en="of Use">الاستخدام</span> <span data-ar="يجب الالتزام بها" data-en="Must Be Followed">يجب الالتزام بها</span></span>
+                </h1>
+
+                <!-- Description -->
+                <p class="hero-description" data-ar="تعرف على القوانين والشروط التي تحكم استخدام خدمات Elite Studio. عدم الالتزام بهذه القوانين قد يؤدي إلى عقوبات تصل إلى الحظر الدائم." data-en="Learn about the rules and terms governing the use of Elite Studio services. Failure to comply may result in penalties up to permanent ban.">
+                    تعرف على القوانين والشروط التي تحكم استخدام خدمات Elite Studio. 
+                    عدم الالتزام بهذه القوانين قد يؤدي إلى عقوبات تصل إلى الحظر الدائم.
+                </p>
+
+                <!-- Quick Navigation -->
+                <div class="quick-nav" id="quickNav">
+                    <a href="#discord-rules" class="nav-btn">
+                        <i class="fab fa-discord"></i>
+                        <span data-ar="قوانين Discord" data-en="Discord Rules">قوانين Discord</span>
+                    </a>
+                    <a href="#refund-rules" class="nav-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span data-ar="استرجاع الأموال" data-en="Refund Policy">استرجاع الأموال</span>
+                    </a>
+                    <a href="#buy-sell-rules" class="nav-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span data-ar="الشراء والبيع" data-en="Buy & Sell">الشراء والبيع</span>
+                    </a>
+                    <a href="#order-rules" class="nav-btn">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span data-ar="قوانين الطلب" data-en="Order Rules">قوانين الطلب</span>
+                    </a>
+                    <a href="#copyright" class="nav-btn">
+                        <i class="fas fa-copyright"></i>
+                        <span data-ar="حقوق الملكية" data-en="Copyright">حقوق الملكية</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules Content -->
+    <section class="rules-section" id="rulesContent">
+        <div class="container">
+            <!-- Discord Rules -->
+            <div class="rules-category" id="discord-rules">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fab fa-discord"></i>
+                        <span data-ar="قوانين سيرفر Discord" data-en="Discord Server Rules">قوانين سيرفر Discord</span>
+                    </h2>
+                    <p class="category-description" data-ar="القوانين التي يجب الالتزام بها في سيرفر Discord الرسمي لـ Elite Studio" data-en="Rules that must be followed in the official Elite Studio Discord server">
+                        القوانين التي يجب الالتزام بها في سيرفر Discord الرسمي لـ Elite Studio
+                    </p>
+                </div>
+                
+                <div class="rules-grid">
+                    <!-- Rule 1 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">1</div>
+                            <div class="rule-text">
+                                <h3 data-ar="الاحترام المتبادل" data-en="Mutual Respect">الاحترام المتبادل</h3>
+                                <p data-ar="يجب احترام جميع الأعضاء والموظفين بدون استثناء. الشتائم أو التهديدات ممنوعة." data-en="All members and staff must be respected without exception. Insults or threats are prohibited.">
+                                    يجب احترام جميع الأعضاء والموظفين بدون استثناء. الشتائم أو التهديدات ممنوعة.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-medium">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="إنذار → حظر مؤقت 3 أيام → حظر دائم" data-en="Warning → 3-day ban → Permanent ban">إنذار → حظر مؤقت 3 أيام → حظر دائم</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">2</div>
+                            <div class="rule-text">
+                                <h3 data-ar="منع الإعلان" data-en="No Advertising">منع الإعلان</h3>
+                                <p data-ar="ممنوع نشر روابط أو إعلانات لخدمات منافسة بدون إذن مسبق من الإدارة." data-en="Posting links or advertisements for competing services without prior permission from management is prohibited.">
+                                    ممنوع نشر روابط أو إعلانات لخدمات منافسة بدون إذن مسبق من الإدارة.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="حظر فوري 7 أيام → حظر دائم" data-en="Immediate 7-day ban → Permanent ban">حظر فوري 7 أيام → حظر دائم</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">3</div>
+                            <div class="rule-text">
+                                <h3 data-ar="التحدث باللغة العربية" data-en="Speak Arabic">التحدث باللغة العربية</h3>
+                                <p data-ar="يجب استخدام اللغة العربية في القنوات النصية العامة. الإنجليزية مسموحة في القنوات المخصصة فقط." data-en="Arabic must be used in general text channels. English is only allowed in designated channels.">
+                                    يجب استخدام اللغة العربية في القنوات النصية العامة. الإنجليزية مسموحة في القنوات المخصصة فقط.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-low">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="تنبيه → حذف الرسالة" data-en="Alert → Message deletion">تنبيه → حذف الرسالة</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 4 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">4</div>
+                            <div class="rule-text">
+                                <h3 data-ar="منع المحتوى غير اللائق" data-en="No Inappropriate Content">منع المحتوى غير اللائق</h3>
+                                <p data-ar="ممنوع نشر أي محتوى إباحي، عنيف، أو غير مناسب تحت أي ظرف من الظروف." data-en="Publishing any pornographic, violent, or inappropriate content under any circumstances is prohibited.">
+                                    ممنوع نشر أي محتوى إباحي، عنيف، أو غير مناسب تحت أي ظرف من الظروف.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="حظر دائم فوري" data-en="Immediate permanent ban">حظر دائم فوري</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refund Rules -->
+            <div class="rules-category" id="refund-rules">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span data-ar="قوانين استرجاع الأموال" data-en="Refund Policy Rules">قوانين استرجاع الأموال</span>
+                    </h2>
+                    <p class="category-description" data-ar="سياسة استرجاع الأموال والشروط الخاصة بإلغاء الطلبات واسترداد المبالغ" data-en="Refund policy and terms for order cancellations and money recovery">
+                        سياسة استرجاع الأموال والشروط الخاصة بإلغاء الطلبات واسترداد المبالغ
+                    </p>
+                </div>
+                
+                <div class="rules-grid">
+                    <!-- Rule 1 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">1</div>
+                            <div class="rule-text">
+                                <h3 data-ar="استرجاع خلال 24 ساعة" data-en="Refund Within 24 Hours">استرجاع خلال 24 ساعة</h3>
+                                <p data-ar="يمكن طلب استرجاع المبلغ بالكامل خلال 24 ساعة من الدفع إذا لم يبدأ العمل على الطلب بعد." data-en="A full refund can be requested within 24 hours of payment if work on the order has not started yet.">
+                                    يمكن طلب استرجاع المبلغ بالكامل خلال 24 ساعة من الدفع إذا لم يبدأ العمل على الطلب بعد.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-info">
+                            <span class="penalty-title" data-ar="الحالة" data-en="Status">الحالة</span>
+                            <span class="penalty-details" data-ar="مسموح بدون عقوبات" data-en="Allowed without penalties">مسموح بدون عقوبات</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">2</div>
+                            <div class="rule-text">
+                                <h3 data-ar="استرجاع جزئي بعد البدء" data-en="Partial Refund After Start">استرجاع جزئي بعد البدء</h3>
+                                <p data-ar="إذا بدأ العمل على الطلب، يمكن استرجاع 50% فقط من المبلغ بعد خصم قيمة العمل المنجز." data-en="If work on the order has started, only 50% can be refunded after deducting the value of completed work.">
+                                    إذا بدأ العمل على الطلب، يمكن استرجاع 50% فقط من المبلغ بعد خصم قيمة العمل المنجز.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-medium">
+                            <span class="penalty-title" data-ar="الشرط" data-en="Condition">الشرط</span>
+                            <span class="penalty-details" data-ar="خصم 50% + رسوم إدارية" data-en="50% deduction + admin fees">خصم 50% + رسوم إدارية</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">3</div>
+                            <div class="rule-text">
+                                <h3 data-ar="عدم الاسترجاع بعد التسليم" data-en="No Refund After Delivery">عدم الاسترجاع بعد التسليم</h3>
+                                <p data-ar="لا يمكن استرجاع أي مبلغ بعد تسليم العمل النهائي للمشتري وتأكيد استلامه." data-en="No amount can be refunded after delivery of the final work to the buyer and confirmation of receipt.">
+                                    لا يمكن استرجاع أي مبلغ بعد تسليم العمل النهائي للمشتري وتأكيد استلامه.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="الحالة" data-en="Status">الحالة</span>
+                            <span class="penalty-details" data-ar="غير مسموح مطلقاً" data-en="Not allowed at all">غير مسموح مطلقاً</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 4 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">4</div>
+                            <div class="rule-text">
+                                <h3 data-ar="استرجاع للأخطاء الفنية" data-en="Refund for Technical Errors">استرجاع للأخطاء الفنية</h3>
+                                <p data-ar="في حالة وجود خطأ فني من فريقنا، يتم استرجاع المبلغ بالكامل أو إعادة العمل بدون رسوم إضافية." data-en="In case of a technical error from our team, the full amount is refunded or work is redone without additional fees.">
+                                    في حالة وجود خطأ فني من فريقنا، يتم استرجاع المبلغ بالكامل أو إعادة العمل بدون رسوم إضافية.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-info">
+                            <span class="penalty-title" data-ar="الشرط" data-en="Condition">الشرط</span>
+                            <span class="penalty-details" data-ar="بتقرير فني معتمد" data-en="With approved technical report">بتقرير فني معتمد</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buy & Sell Rules -->
+            <div class="rules-category" id="buy-sell-rules">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span data-ar="قوانين الشراء والبيع" data-en="Buy & Sell Rules">قوانين الشراء والبيع</span>
+                    </h2>
+                    <p class="category-description" data-ar="القوانين المنظمة لعمليات الشراء والبيع داخل منصة Elite Studio" data-en="Rules governing buying and selling operations within the Elite Studio platform">
+                        القوانين المنظمة لعمليات الشراء والبيع داخل منصة Elite Studio
+                    </p>
+                </div>
+                
+                <div class="rules-grid">
+                    <!-- Rule 1 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">1</div>
+                            <div class="rule-text">
+                                <h3 data-ar="الدفع المسبق" data-en="Prepayment">الدفع المسبق</h3>
+                                <p data-ar="يجب دفع 50% من المبلغ مسبقاً قبل بدء العمل، والباقي عند التسليم." data-en="50% of the amount must be paid in advance before starting work, and the rest upon delivery.">
+                                    يجب دفع 50% من المبلغ مسبقاً قبل بدء العمل، والباقي عند التسليم.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="إلغاء الطلب + حظر من الخدمات" data-en="Order cancellation + service ban">إلغاء الطلب + حظر من الخدمات</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">2</div>
+                            <div class="rule-text">
+                                <h3 data-ar="منع التعامل خارج المنصة" data-en="No Off-Platform Dealing">منع التعامل خارج المنصة</h3>
+                                <p data-ar="ممنوع التعامل خارج منصة Elite Studio أو محاولة تجاوز نظام الدفع الرسمي." data-en="Dealing outside the Elite Studio platform or attempting to bypass the official payment system is prohibited.">
+                                    ممنوع التعامل خارج منصة Elite Studio أو محاولة تجاوز نظام الدفع الرسمي.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="حظر دائم من المنصة" data-en="Permanent platform ban">حظر دائم من المنصة</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">3</div>
+                            <div class="rule-text">
+                                <h3 data-ar="تأكيد التسليم" data-en="Delivery Confirmation">تأكيد التسليم</h3>
+                                <p data-ar="المشتري لديه 48 ساعة فقط لتأكيد استلام العمل أو الإبلاغ عن أي مشاكل بعد التسليم." data-en="The buyer has only 48 hours to confirm receipt of work or report any problems after delivery.">
+                                    المشتري لديه 48 ساعة فقط لتأكيد استلام العمل أو الإبلاغ عن أي مشاكل بعد التسليم.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-medium">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="اعتبار العمل مكتملاً تلقائياً" data-en="Work considered automatically completed">اعتبار العمل مكتملاً تلقائياً</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 4 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">4</div>
+                            <div class="rule-text">
+                                <h3 data-ar="ضمان الجودة" data-en="Quality Guarantee">ضمان الجودة</h3>
+                                <p data-ar="نضمن إصلاح أي أخطاء فنية خلال 7 أيام من التسليم بدون رسوم إضافية." data-en="We guarantee to fix any technical errors within 7 days of delivery without additional fees.">
+                                    نضمن إصلاح أي أخطاء فنية خلال 7 أيام من التسليم بدون رسوم إضافية.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-info">
+                            <span class="penalty-title" data-ar="الضمان" data-en="Guarantee">الضمان</span>
+                            <span class="penalty-details" data-ar="7 أيام من تاريخ التسليم" data-en="7 days from delivery date">7 أيام من تاريخ التسليم</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Rules -->
+            <div class="rules-category" id="order-rules">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span data-ar="قوانين تقديم الطلبات" data-en="Order Submission Rules">قوانين تقديم الطلبات</span>
+                    </h2>
+                    <p class="category-description" data-ar="الإجراءات والشروط اللازمة لتقديم طلبات جديدة على المنصة" data-en="Procedures and conditions required to submit new orders on the platform">
+                        الإجراءات والشروط اللازمة لتقديم طلبات جديدة على المنصة
+                    </p>
+                </div>
+                
+                <div class="rules-grid">
+                    <!-- Rule 1 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">1</div>
+                            <div class="rule-text">
+                                <h3 data-ar="وضوح المتطلبات" data-en="Clear Requirements">وضوح المتطلبات</h3>
+                                <p data-ar="يجب تقديم جميع متطلبات العمل بشكل واضح ومفصل قبل بدء المشروع." data-en="All work requirements must be submitted clearly and in detail before starting the project.">
+                                    يجب تقديم جميع متطلبات العمل بشكل واضح ومفصل قبل بدء المشروع.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-medium">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="تأخير في التسليم + رسوم إضافية" data-en="Delivery delay + additional fees">تأخير في التسليم + رسوم إضافية</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">2</div>
+                            <div class="rule-text">
+                                <h3 data-ar="تعديلات ما بعد التسليم" data-en="Post-Delivery Modifications">تعديلات ما بعد التسليم</h3>
+                                <p data-ar="التعديلات بعد التسليم النهائي تخضع لرسوم إضافية حسب حجم التعديل." data-en="Modifications after final delivery are subject to additional fees depending on the size of the modification.">
+                                    التعديلات بعد التسليم النهائي تخضع لرسوم إضافية حسب حجم التعديل.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-low">
+                            <span class="penalty-title" data-ar="الرسوم" data-en="Fees">الرسوم</span>
+                            <span class="penalty-details" data-ar="20%-50% من سعر الطلب الأصلي" data-en="20%-50% of original order price">20%-50% من سعر الطلب الأصلي</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">3</div>
+                            <div class="rule-text">
+                                <h3 data-ar="إلغاء الطلب من العميل" data-en="Order Cancellation by Customer">إلغاء الطلب من العميل</h3>
+                                <p data-ar="يمكن للعميل إلغاء الطلب مع دفع 30% من قيمة الطلب كرسوم إلغاء إذا تم البدء بالعمل." data-en="The customer can cancel the order by paying 30% of the order value as a cancellation fee if work has started.">
+                                    يمكن للعميل إلغاء الطلب مع دفع 30% من قيمة الطلب كرسوم إلغاء إذا تم البدء بالعمل.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-medium">
+                            <span class="penalty-title" data-ar="الرسوم" data-en="Fees">الرسوم</span>
+                            <span class="penalty-details" data-ar="30% من قيمة الطلب الأصلي" data-en="30% of original order value">30% من قيمة الطلب الأصلي</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 4 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">4</div>
+                            <div class="rule-text">
+                                <h3 data-ar="مواعيد التسليم" data-en="Delivery Dates">مواعيد التسليم</h3>
+                                <p data-ar="يتم الاتفاق على موعد التسليم النهائي قبل البدء ولا يمكن التعديل إلا بموافقة الطرفين." data-en="The final delivery date is agreed upon before starting and cannot be modified except with the consent of both parties.">
+                                    يتم الاتفاق على موعد التسليم النهائي قبل البدء ولا يمكن التعديل إلا بموافقة الطرفين.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="خصم 10% من السعر لكل يوم تأخير" data-en="10% discount from price for each day delay">خصم 10% من السعر لكل يوم تأخير</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="rules-category" id="copyright">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-copyright"></i>
+                        <span data-ar="حقوق الملكية والنشر" data-en="Copyright & Intellectual Property">حقوق الملكية والنشر</span>
+                    </h2>
+                    <p class="category-description" data-ar="قوانين حماية حقوق الملكية الفكرية وحقوق النشر للمحتوى والتصاميم" data-en="Laws protecting intellectual property rights and copyrights for content and designs">
+                        قوانين حماية حقوق الملكية الفكرية وحقوق النشر للمحتوى والتصاميم
+                    </p>
+                </div>
+                
+                <div class="rules-grid">
+                    <!-- Rule 1 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">1</div>
+                            <div class="rule-text">
+                                <h3 data-ar="ملكية التصاميم" data-en="Design Ownership">ملكية التصاميم</h3>
+                                <p data-ar="جميع الحقوق التجارية للتصاميم تنتقل للعميل بعد السداد الكامل. يحق لنا عرض العمل في معرض الأعمال." data-en="All commercial rights to designs are transferred to the client after full payment. We have the right to display the work in the gallery.">
+                                    جميع الحقوق التجارية للتصاميم تنتقل للعميل بعد السداد الكامل. يحق لنا عرض العمل في معرض الأعمال.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="مقاضاة قانونية + تعويضات" data-en="Legal prosecution + compensation">مقاضاة قانونية + تعويضات</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 2 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">2</div>
+                            <div class="rule-text">
+                                <h3 data-ar="منع إعادة البيع" data-en="No Reselling">منع إعادة البيع</h3>
+                                <p data-ar="يمنع على العميل إعادة بيع التصميم أو جزء منه لأطراف ثالثة بدون إذن كتابي منا." data-en="The client is prohibited from reselling the design or any part of it to third parties without our written permission.">
+                                    يمنع على العميل إعادة بيع التصميم أو جزء منه لأطراف ثالثة بدون إذن كتابي منا.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="حظر دائم + مطالبة مالية" data-en="Permanent ban + financial claim">حظر دائم + مطالبة مالية</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 3 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">3</div>
+                            <div class="rule-text">
+                                <h3 data-ar="حقوق النشر للمنصة" data-en="Platform Copyright">حقوق النشر للمنصة</h3>
+                                <p data-ar="جميع محتويات المنصة من تصميم وبرمجة محمية بحقوق النشر ولا يسمح بنسخها أو إعادة استخدامها." data-en="All platform content including design and programming is protected by copyright and may not be copied or reused.">
+                                    جميع محتويات المنصة من تصميم وبرمجة محمية بحقوق النشر ولا يسمح بنسخها أو إعادة استخدامها.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-high">
+                            <span class="penalty-title" data-ar="العقوبة" data-en="Penalty">العقوبة</span>
+                            <span class="penalty-details" data-ar="إزالة المحتوى + غرامة 500$" data-en="Content removal + $500 fine">إزالة المحتوى + غرامة 500$</span>
+                        </div>
+                    </div>
+
+                    <!-- Rule 4 -->
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-number">4</div>
+                            <div class="rule-text">
+                                <h3 data-ar="الاستخدام الشخصي" data-en="Personal Use">الاستخدام الشخصي</h3>
+                                <p data-ar="يمكن للعميل استخدام التصميم لأغراضه الشخصية أو التجارية المرخصة بدون قيود بعد السداد الكامل." data-en="The client can use the design for personal or licensed commercial purposes without restrictions after full payment.">
+                                    يمكن للعميل استخدام التصميم لأغراضه الشخصية أو التجارية المرخصة بدون قيود بعد السداد الكامل.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="penalty-card penalty-info">
+                            <span class="penalty-title" data-ar="الحق" data-en="Right">الحق</span>
+                            <span class="penalty-details" data-ar="مسموح بعد السداد الكامل" data-en="Allowed after full payment">مسموح بعد السداد الكامل</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Important Notice -->
+    <section class="notice-section">
+        <div class="container">
+            <div class="notice-card">
+                <div class="notice-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="notice-content">
+                    <h3 data-ar="ملاحظة مهمة" data-en="Important Notice">ملاحظة مهمة</h3>
+                    <p data-ar="باستخدامك لخدمات Elite Studio، فإنك توافق على جميع القوانين والشروط المذكورة أعلاه. الإدارة تحتفظ بحقها في تعديل هذه القوانين في أي وقت بدون إشعار مسبق." data-en="By using Elite Studio services, you agree to all the rules and terms mentioned above. Management reserves the right to modify these rules at any time without prior notice.">
+                        باستخدامك لخدمات Elite Studio، فإنك توافق على جميع القوانين والشروط المذكورة أعلاه. 
+                        الإدارة تحتفظ بحقها في تعديل هذه القوانين في أي وقت بدون إشعار مسبق.
+                    </p>
+                    <div class="notice-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span data-ar="تاريخ آخر تحديث:  2026" data-en="Last Updated:  2026">تاريخ آخر تحديث: ديسمبر 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSS الخاص بصفحة القوانين -->
+    <style>
+        /* Rules Section Styles */
+        .rules-section {
+            padding: 80px 0;
+        }
+
+        .quick-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--panel);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+            transform: translateY(-3px);
+        }
+
+        .rules-category {
+            margin-bottom: 80px;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .category-description {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .rules-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .rule-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            transition: all 0.3s;
+        }
+
+        .rule-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(107, 114, 153, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .rule-content {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .rule-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .rule-text h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .rule-text p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .penalty-card {
+            width: 250px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .penalty-low {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+        }
+
+        .penalty-medium {
+            background: linear-gradient(135deg, #FF9800, #EF6C00);
+            color: white;
+        }
+
+        .penalty-high {
+            background: linear-gradient(135deg, #F44336, #C62828);
+            color: white;
+        }
+
+        .penalty-info {
+            background: linear-gradient(135deg, #2196F3, #0D47A1);
+            color: white;
+        }
+
+        .penalty-title {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .penalty-details {
+            display: block;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Notice Section */
+        .notice-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        }
+
+        .notice-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            color: white;
+        }
+
+        .notice-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .notice-content {
+            flex: 1;
+        }
+
+        .notice-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .notice-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .notice-date {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 992px) {
+            .rule-card {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 20px;
+            }
+            
+            .penalty-card {
+                width: 100%;
+            }
+            
+            .notice-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quick-nav {
+                gap: 10px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .category-title {
+                font-size: 1.8rem;
+            }
+
+            .rule-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .rule-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .notice-card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .quick-nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <script>
+        // نظام اللغات
+        const translations = {
+            ar: {
+                // Navigation
+                home: 'الرئيسية',
+                store: 'المتجر',
+                gallery: 'معرض الأعمال',
+                rules: 'القوانين',
+                
+                // Hero Section
+                mandatoryRules: 'قوانين إلزامية',
+                strictPenalties: 'عقوبات صارمة',
+                rulesTitle: 'قوانين وشروط',
+                ofUse: 'الاستخدام',
+                mustBeFollowed: 'يجب الالتزام بها',
+                heroDescription: 'تعرف على القوانين والشروط التي تحكم استخدام خدمات Elite Studio. عدم الالتزام بهذه القوانين قد يؤدي إلى عقوبات تصل إلى الحظر الدائم.',
+                discordRules: 'قوانين Discord',
+                refundPolicy: 'استرجاع الأموال',
+                buySell: 'الشراء والبيع',
+                orderRules: 'قوانين الطلب',
+                copyright: 'حقوق الملكية',
+                
+                // Discord Rules
+                discordServerRules: 'قوانين سيرفر Discord',
+                discordCategoryDesc: 'القوانين التي يجب الالتزام بها في سيرفر Discord الرسمي لـ Elite Studio',
+                mutualRespect: 'الاحترام المتبادل',
+                mutualRespectDesc: 'يجب احترام جميع الأعضاء والموظفين بدون استثناء. الشتائم أو التهديدات ممنوعة.',
+                penalty: 'العقوبة',
+                warningToPermaban: 'إنذار → حظر مؤقت 3 أيام → حظر دائم',
+                noAdvertising: 'منع الإعلان',
+                noAdvertisingDesc: 'ممنوع نشر روابط أو إعلانات لخدمات منافسة بدون إذن مسبق من الإدارة.',
+                immediate7DayBan: 'حظر فوري 7 أيام → حظر دائم',
+                speakArabic: 'التحدث باللغة العربية',
+                speakArabicDesc: 'يجب استخدام اللغة العربية في القنوات النصية العامة. الإنجليزية مسموحة في القنوات المخصصة فقط.',
+                alertToDelete: 'تنبيه → حذف الرسالة',
+                noInappropriateContent: 'منع المحتوى غير اللائق',
+                noInappropriateContentDesc: 'ممنوع نشر أي محتوى إباحي، عنيف، أو غير مناسب تحت أي ظرف من الظروف.',
+                immediatePermaban: 'حظر دائم فوري',
+                
+                // Refund Rules
+                refundPolicyRules: 'قوانين استرجاع الأموال',
+                refundCategoryDesc: 'سياسة استرجاع الأموال والشروط الخاصة بإلغاء الطلبات واسترداد المبالغ',
+                refundWithin24Hours: 'استرجاع خلال 24 ساعة',
+                refundWithin24HoursDesc: 'يمكن طلب استرجاع المبلغ بالكامل خلال 24 ساعة من الدفع إذا لم يبدأ العمل على الطلب بعد.',
+                status: 'الحالة',
+                allowedNoPenalties: 'مسموح بدون عقوبات',
+                partialRefundAfterStart: 'استرجاع جزئي بعد البدء',
+                partialRefundAfterStartDesc: 'إذا بدأ العمل على الطلب، يمكن استرجاع 50% فقط من المبلغ بعد خصم قيمة العمل المنجز.',
+                condition: 'الشرط',
+                halfDeduction: 'خصم 50% + رسوم إدارية',
+                noRefundAfterDelivery: 'عدم الاسترجاع بعد التسليم',
+                noRefundAfterDeliveryDesc: 'لا يمكن استرجاع أي مبلغ بعد تسليم العمل النهائي للمشتري وتأكيد استلامه.',
+                notAllowedAtAll: 'غير مسموح مطلقاً',
+                refundForTechnicalErrors: 'استرجاع للأخطاء الفنية',
+                refundForTechnicalErrorsDesc: 'في حالة وجود خطأ فني من فريقنا، يتم استرجاع المبلغ بالكامل أو إعادة العمل بدون رسوم إضافية.',
+                withTechnicalReport: 'بتقرير فني معتمد',
+                
+                // Buy & Sell Rules
+                buySellRules: 'قوانين الشراء والبيع',
+                buySellCategoryDesc: 'القوانين المنظمة لعمليات الشراء والبيع داخل منصة Elite Studio',
+                prepayment: 'الدفع المسبق',
+                prepaymentDesc: 'يجب دفع 50% من المبلغ مسبقاً قبل بدء العمل، والباقي عند التسليم.',
+                orderCancelServiceBan: 'إلغاء الطلب + حظر من الخدمات',
+                noOffPlatformDealing: 'منع التعامل خارج المنصة',
+                noOffPlatformDealingDesc: 'ممنوع التعامل خارج منصة Elite Studio أو محاولة تجاوز نظام الدفع الرسمي.',
+                permanentPlatformBan: 'حظر دائم من المنصة',
+                deliveryConfirmation: 'تأكيد التسليم',
+                deliveryConfirmationDesc: 'المشتري لديه 48 ساعة فقط لتأكيد استلام العمل أو الإبلاغ عن أي مشاكل بعد التسليم.',
+                autoComplete: 'اعتبار العمل مكتملاً تلقائياً',
+                qualityGuarantee: 'ضمان الجودة',
+                qualityGuaranteeDesc: 'نضمن إصلاح أي أخطاء فنية خلال 7 أيام من التسليم بدون رسوم إضافية.',
+                guarantee: 'الضمان',
+                sevenDaysFromDelivery: '7 أيام من تاريخ التسليم',
+                
+                // Order Rules
+                orderSubmissionRules: 'قوانين تقديم الطلبات',
+                orderCategoryDesc: 'الإجراءات والشروط اللازمة لتقديم طلبات جديدة على المنصة',
+                clearRequirements: 'وضوح المتطلبات',
+                clearRequirementsDesc: 'يجب تقديم جميع متطلبات العمل بشكل واضح ومفصل قبل بدء المشروع.',
+                delayAndFees: 'تأخير في التسليم + رسوم إضافية',
+                postDeliveryModifications: 'تعديلات ما بعد التسليم',
+                postDeliveryModificationsDesc: 'التعديلات بعد التسليم النهائي تخضع لرسوم إضافية حسب حجم التعديل.',
+                fees: 'الرسوم',
+                twentyToFiftyPercent: '20%-50% من سعر الطلب الأصلي',
+                orderCancellationByCustomer: 'إلغاء الطلب من العميل',
+                orderCancellationByCustomerDesc: 'يمكن للعميل إلغاء الطلب مع دفع 30% من قيمة الطلب كرسوم إلغاء إذا تم البدء بالعمل.',
+                thirtyPercentFee: '30% من قيمة الطلب الأصلي',
+                deliveryDates: 'مواعيد التسليم',
+                deliveryDatesDesc: 'يتم الاتفاق على موعد التسليم النهائي قبل البدء ولا يمكن التعديل إلا بموافقة الطرفين.',
+                tenPercentDiscountPerDay: 'خصم 10% من السعر لكل يوم تأخير',
+                
+                // Copyright
+                copyrightIntellectual: 'حقوق الملكية والنشر',
+                copyrightCategoryDesc: 'قوانين حماية حقوق الملكية الفكرية وحقوق النشر للمحتوى والتصاميم',
+                designOwnership: 'ملكية التصاميم',
+                designOwnershipDesc: 'جميع الحقوق التجارية للتصاميم تنتقل للعميل بعد السداد الكامل. يحق لنا عرض العمل في معرض الأعمال.',
+                legalProsecution: 'مقاضاة قانونية + تعويضات',
+                noReselling: 'منع إعادة البيع',
+                noResellingDesc: 'يمنع على العميل إعادة بيع التصميم أو جزء منه لأطراف ثالثة بدون إذن كتابي منا.',
+                permanentBanFinancial: 'حظر دائم + مطالبة مالية',
+                platformCopyright: 'حقوق النشر للمنصة',
+                platformCopyrightDesc: 'جميع محتويات المنصة من تصميم وبرمجة محمية بحقوق النشر ولا يسمح بنسخها أو إعادة استخدامها.',
+                contentRemovalFine: 'إزالة المحتوى + غرامة 500$',
+                personalUse: 'الاستخدام الشخصي',
+                personalUseDesc: 'يمكن للعميل استخدام التصميم لأغراضه الشخصية أو التجارية المرخصة بدون قيود بعد السداد الكامل.',
+                right: 'الحق',
+                allowedAfterPayment: 'مسموح بعد السداد الكامل',
+                
+                // Notice
+                importantNotice: 'ملاحظة مهمة',
+                noticeText: 'باستخدامك لخدمات Elite Studio، فإنك توافق على جميع القوانين والشروط المذكورة أعلاه. الإدارة تحتفظ بحقها في تعديل هذه القوانين في أي وقت بدون إشعار مسبق.',
+                lastUpdated: 'تاريخ آخر تحديث: ديسمبر 2024',
+                
+                // Discord Auth
+                connectDiscord: 'ربط Discord',
+                profile: 'الملف الشخصي',
+                accountInfo: 'معلومات الحساب',
+                logout: 'تسجيل الخروج'
+            },
+            en: {
+                // Navigation
+                home: 'Home',
+                store: 'Store',
+                gallery: 'Gallery',
+                rules: 'Rules',
+                
+                // Hero Section
+                mandatoryRules: 'Mandatory Rules',
+                strictPenalties: 'Strict Penalties',
+                rulesTitle: 'Rules & Terms',
+                ofUse: 'of Use',
+                mustBeFollowed: 'Must Be Followed',
+                heroDescription: 'Learn about the rules and terms governing the use of Elite Studio services. Failure to comply may result in penalties up to permanent ban.',
+                discordRules: 'Discord Rules',
+                refundPolicy: 'Refund Policy',
+                buySell: 'Buy & Sell',
+                orderRules: 'Order Rules',
+                copyright: 'Copyright',
+                
+                // Discord Rules
+                discordServerRules: 'Discord Server Rules',
+                discordCategoryDesc: 'Rules that must be followed in the official Elite Studio Discord server',
+                mutualRespect: 'Mutual Respect',
+                mutualRespectDesc: 'All members and staff must be respected without exception. Insults or threats are prohibited.',
+                penalty: 'Penalty',
+                warningToPermaban: 'Warning → 3-day ban → Permanent ban',
+                noAdvertising: 'No Advertising',
+                noAdvertisingDesc: 'Posting links or advertisements for competing services without prior permission from management is prohibited.',
+                immediate7DayBan: 'Immediate 7-day ban → Permanent ban',
+                speakArabic: 'Speak Arabic',
+                speakArabicDesc: 'Arabic must be used in general text channels. English is only allowed in designated channels.',
+                alertToDelete: 'Alert → Message deletion',
+                noInappropriateContent: 'No Inappropriate Content',
+                noInappropriateContentDesc: 'Publishing any pornographic, violent, or inappropriate content under any circumstances is prohibited.',
+                immediatePermaban: 'Immediate permanent ban',
+                
+                // Refund Rules
+                refundPolicyRules: 'Refund Policy Rules',
+                refundCategoryDesc: 'Refund policy and terms for order cancellations and money recovery',
+                refundWithin24Hours: 'Refund Within 24 Hours',
+                refundWithin24HoursDesc: 'A full refund can be requested within 24 hours of payment if work on the order has not started yet.',
+                status: 'Status',
+                allowedNoPenalties: 'Allowed without penalties',
+                partialRefundAfterStart: 'Partial Refund After Start',
+                partialRefundAfterStartDesc: 'If work on the order has started, only 50% can be refunded after deducting the value of completed work.',
+                condition: 'Condition',
+                halfDeduction: '50% deduction + admin fees',
+                noRefundAfterDelivery: 'No Refund After Delivery',
+                noRefundAfterDeliveryDesc: 'No amount can be refunded after delivery of the final work to the buyer and confirmation of receipt.',
+                notAllowedAtAll: 'Not allowed at all',
+                refundForTechnicalErrors: 'Refund for Technical Errors',
+                refundForTechnicalErrorsDesc: 'In case of a technical error from our team, the full amount is refunded or work is redone without additional fees.',
+                withTechnicalReport: 'With approved technical report',
+                
+                // Buy & Sell Rules
+                buySellRules: 'Buy & Sell Rules',
+                buySellCategoryDesc: 'Rules governing buying and selling operations within the Elite Studio platform',
+                prepayment: 'Prepayment',
+                prepaymentDesc: '50% of the amount must be paid in advance before starting work, and the rest upon delivery.',
+                orderCancelServiceBan: 'Order cancellation + service ban',
+                noOffPlatformDealing: 'No Off-Platform Dealing',
+                noOffPlatformDealingDesc: 'Dealing outside the Elite Studio platform or attempting to bypass the official payment system is prohibited.',
+                permanentPlatformBan: 'Permanent platform ban',
+                deliveryConfirmation: 'Delivery Confirmation',
+                deliveryConfirmationDesc: 'The buyer has only 48 hours to confirm receipt of work or report any problems after delivery.',
+                autoComplete: 'Work considered automatically completed',
+                qualityGuarantee: 'Quality Guarantee',
+                qualityGuaranteeDesc: 'We guarantee to fix any technical errors within 7 days of delivery without additional fees.',
+                guarantee: 'Guarantee',
+                sevenDaysFromDelivery: '7 days from delivery date',
+                
+                // Order Rules
+                orderSubmissionRules: 'Order Submission Rules',
+                orderCategoryDesc: 'Procedures and conditions required to submit new orders on the platform',
+                clearRequirements: 'Clear Requirements',
+                clearRequirementsDesc: 'All work requirements must be submitted clearly and in detail before starting the project.',
+                delayAndFees: 'Delivery delay + additional fees',
+                postDeliveryModifications: 'Post-Delivery Modifications',
+                postDeliveryModificationsDesc: 'Modifications after final delivery are subject to additional fees depending on the size of the modification.',
+                fees: 'Fees',
+                twentyToFiftyPercent: '20%-50% of original order price',
+                orderCancellationByCustomer: 'Order Cancellation by Customer',
+                orderCancellationByCustomerDesc: 'The customer can cancel the order by paying 30% of the order value as a cancellation fee if work has started.',
+                thirtyPercentFee: '30% of original order value',
+                deliveryDates: 'Delivery Dates',
+                deliveryDatesDesc: 'The final delivery date is agreed upon before starting and cannot be modified except with the consent of both parties.',
+                tenPercentDiscountPerDay: '10% discount from price for each day delay',
+                
+                // Copyright
+                copyrightIntellectual: 'Copyright & Intellectual Property',
+                copyrightCategoryDesc: 'Laws protecting intellectual property rights and copyrights for content and designs',
+                designOwnership: 'Design Ownership',
+                designOwnershipDesc: 'All commercial rights to designs are transferred to the client after full payment. We have the right to display the work in the gallery.',
+                legalProsecution: 'Legal prosecution + compensation',
+                noReselling: 'No Reselling',
+                noResellingDesc: 'The client is prohibited from reselling the design or any part of it to third parties without our written permission.',
+                permanentBanFinancial: 'Permanent ban + financial claim',
+                platformCopyright: 'Platform Copyright',
+                platformCopyrightDesc: 'All platform content including design and programming is protected by copyright and may not be copied or reused.',
+                contentRemovalFine: 'Content removal + $500 fine',
+                personalUse: 'Personal Use',
+                personalUseDesc: 'The client can use the design for personal or licensed commercial purposes without restrictions after full payment.',
+                right: 'Right',
+                allowedAfterPayment: 'Allowed after full payment',
+                
+                // Notice
+                importantNotice: 'Important Notice',
+                noticeText: 'By using Elite Studio services, you agree to all the rules and terms mentioned above. Management reserves the right to modify these rules at any time without prior notice.',
+                lastUpdated: 'Last Updated: December 2024',
+                
+                // Discord Auth
+                connectDiscord: 'Connect Discord',
+                profile: 'Profile',
+                accountInfo: 'Account Info',
+                logout: 'Logout'
+            }
+        };
+
+        let currentLang = 'ar';
+
+        // JavaScript for Rules Page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize loading screen
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1000);
+
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Smooth scrolling for quick navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const body = document.body;
+
+            // Check for saved theme or prefer-color-scheme
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            const savedTheme = localStorage.getItem('theme');
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.setAttribute('data-theme', 'dark');
+                    themeIcon.className = 'fas fa-moon';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    themeIcon.className = 'fas fa-sun';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            // Language switcher
+            const languageBtn = document.getElementById('languageBtn');
+            const currentLangSpan = document.getElementById('currentLang');
+            
+            languageBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'ar' ? 'en' : 'ar';
+                currentLangSpan.textContent = currentLang.toUpperCase();
+                updateLanguage(currentLang);
+            });
+
+            // Initialize Discord Auth
+            initDiscordAuth();
+        });
+
+        // Language update function
+        function updateLanguage(lang) {
+            // Update HTML direction
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Update all elements with data-ar and data-en attributes
+            document.querySelectorAll('[data-ar][data-en]').forEach(element => {
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    element.placeholder = element.getAttribute(`data-${lang}`);
+                } else {
+                    element.innerHTML = element.getAttribute(`data-${lang}`);
+                }
+            });
+            
+            // Update navigation
+            updateNavigation(lang);
+        }
+
+        function updateNavigation(lang) {
+            const navTexts = document.querySelectorAll('.nav-text');
+            if (navTexts.length >= 4) {
+                navTexts[0].textContent = translations[lang].home;
+                navTexts[1].textContent = translations[lang].store;
+                navTexts[2].textContent = translations[lang].gallery;
+                navTexts[3].textContent = translations[lang].rules;
+            }
+        }
+
+        // Discord Authentication Functions
+        function initDiscordAuth() {
+            // Check if user is already connected
+            const savedUser = localStorage.getItem('discord_user');
+            const savedToken = localStorage.getItem('discord_token');
+            
+            if (savedUser && savedToken) {
+                try {
+                    const discordUser = JSON.parse(savedUser);
+                    showDiscordProfile(discordUser);
+                } catch (error) {
+                    console.error('Error parsing saved Discord user:', error);
+                    localStorage.removeItem('discord_user');
+                    localStorage.removeItem('discord_token');
+                }
+            }
+        }
+
+        function connectDiscord() {
+            // This function is defined in script.js - will redirect to OAuth
+            window.connectDiscord();
+        }
+
+        function disconnectDiscord() {
+            // This function is defined in script.js
+            window.disconnectDiscord();
+        }
+
+        function toggleProfileMenu() {
+            // This function is defined in script.js
+            window.toggleProfileMenu();
+        }
+
+        function showProfileModal() {
+            // This function is defined in script.js
+            window.showProfileModal();
+        }
+
+        function closeProfileModal() {
+            // This function is defined in script.js
+            window.closeProfileModal();
+        }
+
+        function toggleTheme() {
+            // This function is defined in script.js
+            window.toggleTheme();
+        }
+
+        function showDiscordProfile(user) {
+            const connectBtn = document.getElementById('discordConnectBtn');
+            const profile = document.getElementById('discordProfile');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userId = document.getElementById('userId');
+            
+            if (connectBtn) {
+                connectBtn.style.display = 'none';
+            }
+            
+            if (profile) {
+                profile.style.display = 'flex';
+                
+                if (userAvatar) {
+                    userAvatar.src = user.avatarUrl;
+                    userAvatar.alt = user.globalName || user.username;
+                    userAvatar.onerror = function() {
+                        this.src = `https://cdn.discordapp.com/embed/avatars/${(parseInt(user.discriminator) || 0) % 5}.png`;
+                    };
+                }
+                
+                if (userName) {
+                    userName.textContent = user.globalName || user.username;
+                }
+                
+                if (userId) {
+                    userId.textContent = `#${user.discriminator}`;
+                }
+            }
+            
+            // Update modal content if it exists
+            updateProfileModal(user);
+        }
+
+        function updateProfileModal(user) {
+            const modalUserAvatar = document.getElementById('modalUserAvatar');
+            const modalUserName = document.getElementById('modalUserName');
+            const modalUsername = document.getElementById('modalUsername');
+            const modalUserId = document.getElementById('modalUserId');
+            const connectionDate = document.getElementById('connectionDate');
+            
+            if (modalUserAvatar) {
+                modalUserAvatar.src = user.avatarUrl;
+                modalUserAvatar.alt = user.globalName || user.username;
+                modalUserAvatar.onerror = function() {
+                    this.src = `https://cdn.discordapp.com/embed/avatars/${(parseInt(user.discriminator) || 0) % 5}.png`;
+                };
+            }
+            
+            if (modalUserName) {
+                modalUserName.textContent = user.globalName || user.username;
+            }
+            
+            if (modalUsername) {
+                modalUsername.textContent = `@${user.username}`;
+            }
+            
+            if (modalUserId) {
+                modalUserId.textContent = user.id;
+            }
+            
+            if (connectionDate) {
+                const date = new Date(user.connectedAt);
+                connectionDate.textContent = date.toLocaleDateString(currentLang === 'ar' ? 'ar-SA' : 'en-US') + ' ' + date.toLocaleTimeString();
+            }
+        }
+
+        // Make functions globally accessible
+        window.connectDiscord = connectDiscord;
+        window.disconnectDiscord = disconnectDiscord;
+        window.toggleProfileMenu = toggleProfileMenu;
+        window.showProfileModal = showProfileModal;
+        window.closeProfileModal = closeProfileModal;
+        window.toggleTheme = toggleTheme;
+    </script>
+    <script src="protection.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

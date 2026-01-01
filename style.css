@@ -11,8 +11,8 @@
     --panel-2: #1a1a1a;
     --text: #f3f3f3;
     --muted: #a0a0a0;
-    --accent: #6b7299;
-    --accent-2: #7a82ad;
+    --accent: #0a2ae1;
+    --accent-2: #0a2ae1;
     --border: #242424;
     --accent-glow: rgba(107, 114, 153, 0.2);
     --success: #4ade80;
@@ -46,7 +46,46 @@
     transition: transform 0.8s;
     transform-style: preserve-3d;
 }
+.animated-logo {
+    position: relative;
+}
 
+.logo-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--accent), transparent);
+    border-radius: 10px;
+    opacity: 0;
+    animation: pulse-glow 2s infinite;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    width: 80px;   /* حجم متوسط */
+    height: auto;
+}
+
+.brand-name {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.logo-main {
+    position: relative;
+    z-index: 2;
+}
 .team-card:hover .team-card-inner {
     transform: rotateY(180deg);
 }

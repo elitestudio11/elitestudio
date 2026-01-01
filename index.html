@@ -36,15 +36,16 @@
     </button>
 
     <!-- Header -->
-    <header class="header" id="header">
-        <div class="container">
-            <nav class="nav">
-                <div class="brand">
-                    <div class="logo">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <span class="brand-name">Elite <span class="brand-highlight">Studio</span></span>
-                </div>
+   <header class="header" id="header">
+    <div class="container">
+        <nav class="nav">
+            <div class="brand">
+                <img src="img/logo.png" alt="Elite Studio Logo" class="brand-logo">
+                <span class="brand-name">
+                    Elite <span class="brand-highlight">Studio</span>
+                </span>
+            </div>
+
 
                 <!-- Mobile Menu Toggle -->
                 <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
@@ -53,7 +54,7 @@
 
                 <!-- Navigation Links -->
                 <div class="nav-links" id="navLinks">
-               <a href="#home" class="nav-link active" data-ar="الرئيسية" data-en="Home">
+               <a href="index.html" class="nav-link active" data-ar="الرئيسية" data-en="Home">
                         <i class="fas fa-home"></i>
                         <span class="nav-text">الرئيسية</span>
                     </a>
@@ -62,6 +63,15 @@
                         <span class="nav-text">المتجر</span>
                     </a>
          
+                         <a href="m.html" class="nav-link" data-ar="معرض اعمال" data-en="Gallery">
+                        <i class="fas fa-star"></i>
+                        <span class="nav-text">معرض الأعمال</span>
+                    </a>
+                      </a>
+                        <a href="rules.html" class="nav-link ">
+                     
+                        <span class="nav-text" data-ar="القوانين " data-en="Rules">القوانين </span>
+                    </a>
                     
                     <div class="nav-actions">
                         <!-- Discord Auth Button -->
@@ -353,138 +363,8 @@
         </div>
     </section>
 
-    <!-- Portfolio Section -->
-    <section class="portfolio-section" id="portfolio">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle" data-ar="أعمالنا" data-en="Our Work">أعمالنا</span>
-                <h2 class="section-title" data-ar="معرض التصاميم" data-en="Design Gallery">معرض التصاميم</h2>
-                <p class="section-description" data-ar="اطلع على بعض من أفضل أعمالنا المنجزة لعملائنا" data-en="Check out some of our best work completed for our clients">
-                    اطلع على بعض من أفضل أعمالنا المنجزة لعملائنا
-                </p>
-            </div>
+ 
 
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://cdn.discordapp.com/attachments/1454895295816274126/1454906736015314986/1111.webp?ex=6952cafc&is=6951797c&hm=d8212d0c85cf36a678b8ab4366d804a8627dcb0c380447b191792593af4b90b4&" alt="Discord Design">
-                        <div class="portfolio-overlay">
-                            <h4 data-ar="تصميم سيرفر Discord" data-en="Discord Server Design">تصميم سيرفر Discord</h4>
-                            <p data-ar="تصميم كامل لسيرفر احترافي" data-en="Complete professional server design">تصميم كامل لسيرفر احترافي</p>
-                        </div>
-                    </div>
-                </div>
-        <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi_hqNIE1dJC85m6Zb9zVU45AN0JrTWQw9Iw&s" alt="Discord Design">
-                        <div class="portfolio-overlay">
-                            <h4 data-ar="تصميم سيرفر Discord" data-en="Discord Server Design">تصميم سيرفر Discord</h4>
-                            <p data-ar="تصميم كامل لسيرفر احترافي" data-en="Complete professional server design">تصميم كامل لسيرفر احترافي</p>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle" data-ar="الباقات" data-en="Packages">الباقات</span>
-                <h2 class="section-title" data-ar="اختر الباقة المناسبة لك" data-en="Choose Your Package">اختر الباقة المناسبة لك</h2>
-                <p class="section-description" data-ar="أسعار تنافسية وباقات متنوعة تناسب جميع الاحتياجات" data-en="Competitive prices and diverse packages for all needs">
-                    أسعار تنافسية وباقات متنوعة تناسب جميع الاحتياجات
-                </p>
-            </div>
-
-            <div class="pricing-grid">
-                <!-- Basic Package -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <div class="pricing-icon">
-                            <i class="fas fa-palette"></i>
-                        </div>
-                        <h3 class="pricing-title" data-ar="الباقة الأساسية" data-en="Basic Package">الباقة الأساسية</h3>
-                        <div class="pricing-price">
-                            <span class="currency">$</span>
-                            <span class="amount">5</span>
-                        </div>
-                        <p class="pricing-period" data-ar="لكل تصميم" data-en="Per Design">لكل تصميم</p>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> <span data-ar="تصميم واحد احترافي" data-en="One professional design">تصميم واحد احترافي</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="تعديلان مجانيان" data-en="2 free revisions">تعديلان مجانيان</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="ملفات بجودة عالية" data-en="High quality files">ملفات بجودة عالية</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="تسليم خلال 3 أيام" data-en="3 days delivery">تسليم خلال 3 أيام</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="دعم فني" data-en="Technical support">دعم فني</span></li>
-                    </ul>
-                    <button class="btn btn-primary btn-full" onclick="selectPlan('basic')">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span data-ar="اشترِ الآن" data-en="Buy Now">اشترِ الآن</span>
-                    </button>
-                </div>
-
-                <!-- Pro Package -->
-                <div class="pricing-card pricing-featured">
-                    <div class="pricing-badge" data-ar="الأكثر شعبية" data-en="Most Popular">الأكثر شعبية</div>
-                    <div class="pricing-header">
-                        <div class="pricing-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <h3 class="pricing-title" data-ar="الباقة المتقدمة" data-en="Pro Package">الباقة المتقدمة</h3>
-                        <div class="pricing-price">
-                            <span class="currency">$</span>
-                            <span class="amount">20</span>
-                        </div>
-                        <p class="pricing-period" data-ar="لكل تصميم" data-en="Per Design">لكل تصميم</p>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> <span data-ar="3 تصاميم احترافية" data-en="3 professional designs">3 تصاميم احترافية</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="تعديلات غير محدودة" data-en="Unlimited revisions">تعديلات غير محدودة</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="ملفات مصدر كاملة" data-en="Full source files">ملفات مصدر كاملة</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="تسليم خلال يومين" data-en="2 days delivery">تسليم خلال يومين</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="دعم فني أولوية" data-en="Priority support">دعم فني أولوية</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="استشارة مجانية" data-en="Free consultation">استشارة مجانية</span></li>
-                    </ul>
-                    <button class="btn btn-primary btn-full" onclick="selectPlan('pro')">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span data-ar="اشترِ الآن" data-en="Buy Now">اشترِ الآن</span>
-                    </button>
-                </div>
-
-                <!-- Enterprise Package -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <div class="pricing-icon">
-                            <i class="fas fa-gem"></i>
-                        </div>
-                        <h3 class="pricing-title" data-ar="باقة الأعمال" data-en="Enterprise Package">باقة الأعمال</h3>
-                        <div class="pricing-price">
-                            <span class="currency">$</span>
-                            <span class="amount">30</span>
-                        </div>
-                        <p class="pricing-period" data-ar="لكل مشروع" data-en="Per Project">لكل مشروع</p>
-                    </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> <span data-ar="مشروع كامل متكامل" data-en="Complete full project">مشروع كامل متكامل</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="تعديلات غير محدودة" data-en="Unlimited revisions">تعديلات غير محدودة</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="جميع ملفات المصدر" data-en="All source files">جميع ملفات المصدر</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="تسليم فوري (24 ساعة)" data-en="Express delivery (24h)">تسليم فوري (24 ساعة)</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="دعم فني مخصص" data-en="Dedicated support">دعم فني مخصص</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="مدير مشروع شخصي" data-en="Personal project manager">مدير مشروع شخصي</span></li>
-                        <li><i class="fas fa-check"></i> <span data-ar="ضمان رضا 100%" data-en="100% satisfaction guarantee">ضمان رضا 100%</span></li>
-                    </ul>
-                    <button class="btn btn-primary btn-full" onclick="selectPlan('enterprise')">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span data-ar="اشترِ الآن" data-en="Buy Now">اشترِ الآن</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Contact Section -->
     <section class="contact-section" id="contact">
@@ -661,75 +541,7 @@
         </div>
     </footer>
 
-    <!-- Payment Modal -->
-    <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closePaymentModal">
-                <i class="fas fa-times"></i>
-            </button>
 
-            <div class="modal-header">
-                <i class="fas fa-shopping-cart modal-icon"></i>
-                <h2 id="paymentTitle" data-ar="إتمام عملية الشراء" data-en="Complete Purchase">إتمام عملية الشراء</h2>
-            </div>
-
-            <!-- Loading State -->
-            <div class="payment-loading" id="paymentLoading">
-                <div class="loader-circle"></div>
-                <p data-ar="جاري تحضير نظام الدفع..." data-en="Preparing payment system...">جاري تحضير نظام الدفع...</p>
-            </div>
-
-            <!-- Payment Details -->
-            <div class="payment-details" id="paymentDetails" style="display: none;">
-                <div class="order-summary">
-                    <h3 data-ar="ملخص الطلب" data-en="Order Summary">ملخص الطلب</h3>
-                    <div class="summary-item">
-                        <span data-ar="الباقة المختارة:" data-en="Selected Package:">الباقة المختارة:</span>
-                        <strong id="selectedPlanName"></strong>
-                    </div>
-                    <div class="summary-item">
-                        <span data-ar="السعر:" data-en="Price:">السعر:</span>
-                        <strong id="selectedPlanPrice"></strong>
-                    </div>
-                </div>
-
-                <!-- Payment Methods -->
-                <div class="payment-methods">
-                    <h3 data-ar="اختر طريقة الدفع" data-en="Choose Payment Method">اختر طريقة الدفع</h3>
-                    
-                    <!-- PayPal Button -->
-                    <div class="payment-method">
-                        <div id="paypal-button-container"></div>
-                    </div>
-
-                    <!-- Security Notice -->
-                    <div class="security-notice">
-                        <i class="fas fa-lock"></i>
-                        <p data-ar="جميع المعاملات محمية بتشفير SSL 256-bit" data-en="All transactions are protected with 256-bit SSL encryption">
-                            جميع المعاملات محمية بتشفير SSL 256-bit
-                        </p>
-                    </div>
-                </div>
-
-                <!-- After Payment Notice -->
-                <div class="after-payment-notice">
-                    <div class="notice-icon">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <div class="notice-content">
-                        <h4 data-ar="بعد إتمام الدفع" data-en="After Payment">بعد إتمام الدفع</h4>
-                        <p data-ar="سيتم إنشاء تذكرة Discord تلقائياً لك. يرجى التوجه إلى سيرفرنا وفتح التذكرة لاستلام تصميمك." data-en="A Discord ticket will be automatically created for you. Please go to our server and open the ticket to receive your design.">
-                            سيتم إنشاء تذكرة Discord تلقائياً لك. يرجى التوجه إلى سيرفرنا وفتح التذكرة لاستلام تصميمك.
-                        </p>
-                        <a href="https://discord.gg/elitestudio" target="_blank" class="discord-btn">
-                            <i class="fab fa-discord"></i>
-                            <span data-ar="انضم إلى Discord" data-en="Join Discord">انضم إلى Discord</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Success Modal -->
     <div class="modal" id="successModal">
